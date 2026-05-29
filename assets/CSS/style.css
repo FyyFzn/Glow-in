@@ -1,0 +1,248 @@
+:root {
+  --primary: #ff8c00;
+  --text-dark: #1a1a1a;
+  --text-light: #555;
+  --bg-light: #f8f8ff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: white;
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+/* Navbar */
+.navbar {
+  background-color: var(--primary); 
+  padding: 0rem 2rem;
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* Login Button (outline style) */
+.login-btn {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+  padding: 0.5rem 1.2rem;
+  text-decoration: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+  background-color: white;
+  color: var(--primary);
+}
+
+/* Sign Up Button (filled style) */
+.signup-btn {
+  background-color: white;
+  color: var(--primary);
+  border: none;
+  text-decoration: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.signup-btn:hover {
+  opacity: 0.85;
+}
+
+/* Hero */
+.hero {
+  background-color: #ff8c00; 
+  color: white;
+  text-align: center;
+  padding: 11rem 1.5rem 0; /* Hilangkan padding bawah besar */
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-content {
+  padding-bottom: 10rem; /* Kasih jarak biar teks gak ketimpa wave */
+}
+
+.hero-content h2 {
+  font-size: 1.8rem;
+  max-width: 740px;
+  margin: 0 auto 1rem;
+}
+
+.hero-content p {
+  max-width: 740px;
+  margin: 0 auto;
+  font-size: 0.95rem;
+}
+
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.wave svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+}
+
+
+/* Featured */
+.featured {
+  text-align: center;
+  padding: 1rem 1rem 2rem 1rem;
+  background: #f9f9fb;
+  color: var(--text-light);
+}
+
+.featured p{
+  font-size: 12px;
+  margin-bottom: 33px;
+}
+
+.featured .logos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.featured .logos span{
+  margin-bottom: 0.75rem;
+}
+
+/* Features */
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 16px 16px 10px 16px;
+}
+
+.container-cos {
+  max-width: 1100px;
+  margin: auto;
+  padding: 86px 16px 80px 16px;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1.5rem;
+}
+
+.feature-card {
+  background-color: var(--bg-light);
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.feature-card h3 {
+  color: var(--text-dark);
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* CTA Section */
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: #f3f3ff;
+  padding: 3rem 5rem;
+  gap: 2rem;
+  margin: 0 auto;
+}
+
+.cta-content {
+  flex: 1 1 400px;
+  max-width: 550px;
+}
+
+.cta-content h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.btn-primary {
+  background-color: var(--primary); 
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cta img {
+  flex: 1 1 300px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 100%;
+}
+
+
+/* Footer */
+footer {
+  background-color: #ff8c00; 
+  color: white;
+  padding: 2rem 1rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.links a {
+  color: white;
+  text-decoration: none;
+  font-size: 0.9rem;
+}

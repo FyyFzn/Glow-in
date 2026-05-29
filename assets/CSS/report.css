@@ -1,0 +1,199 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+/* Background Feed Layout */
+.feed-background {
+  display: grid;
+  grid-template-columns: 250px 1fr 300px;
+  height: 100vh;
+  width: 100%;
+  background: #f7f9f9;
+}
+
+.sidebar {
+  background: #ffffff;
+  border-right: 1px solid #ddd;
+  opacity: 0.9;
+}
+
+.timeline {
+  background: #ffffff;
+  border-right: 1px solid #ddd;
+  opacity: 0.9;
+}
+
+.trends {
+  background: #ffffff;
+  opacity: 0.9;
+}
+
+/* Overlay */
+.overlay {
+  position: grid;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(4px);
+  background: rgba(0,0,0,0.4);
+  z-index: 10;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 420px;
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  z-index: 20;
+}
+
+/* Header */ 
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.modal-header h2 {
+  font-size: 18px;
+}
+
+.close-btn {
+  position: absolute;
+  left: 0;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+}
+
+/* Progress Bar */
+.progress-bar {
+  width: 100%;
+  height: 3px;
+  background: #ddd;
+  border-radius: 3px;
+  margin-bottom: 25px;
+}
+
+.progress {
+  width: 40%;
+  height: 100%;
+  background: #6a5af9;
+  border-radius: 3px;
+}
+
+/* Form */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+.form-group input {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+/* Button */
+.next-btn {
+  margin-top: 25px;
+  width: 100%;
+  padding: 10px;
+  background: #dcd8ff;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+
+@media (max-width: 992px) {
+
+  .feed-background {
+    grid-template-columns: 200px 1fr 200px;
+  }
+
+  .modal {
+    width: 60%;
+    padding: 20px;
+  }
+}
+
+/* Mobile Landscape dan Small Tablet (max-width: 768px) */
+@media (max-width: 768px) {
+
+  /* Feed background jadi 1 kolom */
+  .feed-background {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+
+  .trends {
+    display: none; 
+  }
+
+  .modal {
+    width: 80%;
+    padding: 20px;
+  }
+
+  .modal-header h2 {
+    font-size: 20px;
+  }
+
+  .form-group input {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .modal {
+    width: 90%;
+    padding: 18px;
+    border-radius: 12px;
+  }
+
+  .modal-header {
+    padding-bottom: 10px;
+  }
+
+  .modal-header h2 {
+    font-size: 18px;
+  }
+
+  .close-btn {
+    font-size: 22px;
+  }
+
+  .progress-bar {
+    height: 6px;
+  }
+
+  .next-btn {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
