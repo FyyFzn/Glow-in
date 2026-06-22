@@ -1,224 +1,16 @@
-
-:root {
-  --bg-color: #F8F6F2;
-  --card-bg: #FFFFFF;
-  --text-primary: #1A1A1A;
-  --text-secondary: #666666;
-  --text-tertiary: #999999;
-  --accent-orange: #F58A42;
-  --border-color: #EAEAEA;
-  
-  
-  --sidebar-left-width: 280px;
-  --sidebar-right-width: 360px;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Inter', sans-serif;
-}
-
-html, body {
-  height: 100vh;
-  overflow: hidden; 
-  background-color: #FFFFFF;
-}
-
-
-.layout {
-  display: flex;
-  max-width: 1600px;
-  margin: 0 auto;
-  height: 100vh;
-}
-
-
-.sidebar-left {
-  width: var(--sidebar-left-width);
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  background-color: #FFFFFF;
-  border-right: 1px solid #EEEEEE;
-  flex-shrink: 0; 
-}
-
-
-.main-content {
-  flex: 1;
-  overflow-y: auto; 
-  background-color: var(--bg-color);
-  display: flex;
-  flex-direction: column;
-  min-width: 650px;
-  position: relative;
-}
-
-
-.sidebar-right {
-  width: var(--sidebar-right-width);
-  padding: 24px;
-  height: 100vh;
-  background-color: #FFFFFF;
-  border-left: 1px solid #EEEEEE;
-  flex-shrink: 0;
-}
-
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--accent-orange);
-  margin-bottom: 40px;
-}
-
-.logo-icon {
-  font-size: 28px;
-}
-
-.nav-menu {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex: 1;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 12px 16px;
-  text-decoration: none;
-  color: #4A4A4A;
-  font-weight: 600;
-  font-size: 16px;
-  border-radius: 12px;
-  transition: background 0.2s, color 0.2s;
-}
-
-.nav-item:hover, 
-.nav-item.active {
-  background-color: #F4F7FE;
-  padding-left: 16px;
-  color: var(--text-primary);
-}
-
-.icon-wrapper {
-  position: relative;
-}
-
-.badge {
-  position: absolute;
-  top: -6px;
-  right: -10px;
-  background-color: var(--accent-orange);
-  color: #FFFFFF;
-  font-size: 10px;
-  padding: 2px 6px;
-  border-radius: 10px;
-  border: 2px solid #FFFFFF;
-  font-weight: 700;
-}
-
-.post-btn {
-  background-color: var(--accent-orange);
-  color: #FFFFFF;
-  border: none;
-  width: 100%;
-  padding: 16px;
-  border-radius: 30px;
-  font-weight: 700;
-  font-size: 16px;
-  cursor: pointer;
-  margin-bottom: 32px;
-  box-shadow: 0 4px 12px rgba(245, 138, 66, 0.3);
-}
-
-.user-profile-mini {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  border-radius: 16px;
-  background-color: #F8F9FA;
-  margin-top: auto;
-  cursor: pointer;
-}
-
-.avatar-mini {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.user-info-mini {
-  flex: 1;
-}
-
-.user-info-mini .name {
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.user-info-mini .handle {
-  font-size: 12px;
-  color: var(--text-tertiary);
-}
-
-.menu-dots {
-  color: var(--text-tertiary);
-}
-
-
-.top-header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 20px 24px;
-    background-color: #FFFFFF;
-    border-bottom: 1px solid #EEEEEE;
-}
-
-.back-btn {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: var(--text-primary);
-}
-
-.top-header h1 {
-    font-size: 22px;
-    font-weight: 700;
-}
-
-
-.container {
-    max-width: 850px; 
-    margin: 0 auto;
-    padding: 30px 24px;
-    width: 100%;
-}
-
+/* =============================================================
+   FOLLOWERS.CSS — Styles khusus halaman Followers & Following
+   (digunakan bersama oleh followers.php dan following.php)
+   Membutuhkan: base.css
+   ============================================================= */
 
 .followers-card {
     background: #FFFFFF;
-    border-radius: 20px; 
+    border-radius: 20px;
     border: 1px solid var(--border-color);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-    padding: 10px; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    padding: 10px;
 }
-
 
 .tabs-container {
     display: flex;
@@ -232,16 +24,16 @@ html, body {
     font-weight: 500;
     color: #888;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .tab-item.active {
-    background-color: #F0F0F0; 
+    background-color: #F0F0F0;
     color: #1A1A1A;
     padding: 6px 16px;
     border-radius: 20px;
     font-weight: 600;
 }
-
 
 .followers-list {
     list-style: none;
@@ -253,19 +45,12 @@ html, body {
     align-items: center;
     gap: 16px;
     padding: 16px 20px;
-    border-bottom: 1px solid #F5F5F5; 
+    border-bottom: 1px solid #F5F5F5;
     transition: background 0.2s;
 }
 
 .follower-item:last-child {
     border-bottom: none;
-}
-
-.avatar {
-    width: 44px; 
-    height: 44px;
-    border-radius: 50%;
-    object-fit: cover;
 }
 
 .follower-info {
@@ -283,7 +68,6 @@ html, body {
     font-size: 13px;
     margin-top: 2px;
 }
-
 
 .btn-following {
     background: #FFFFFF;
@@ -309,16 +93,14 @@ html, body {
     min-width: 110px;
 }
 
-
 .search-box {
     position: relative;
     margin-bottom: 16px;
 }
 
-
 .search-box input {
     width: 100%;
-    padding: 12px 16px 12px 42px; 
+    padding: 12px 16px 12px 42px;
     border-radius: 25px;
     border: 1px solid #E0E0E0;
     background: #F8F9FA;
@@ -332,10 +114,9 @@ html, body {
     color: #999;
 }
 
-
 .search-box i {
     position: absolute;
-    left: 16px; 
+    left: 16px;
     top: 50%;
     transform: translateY(-50%);
     color: #777;
@@ -343,131 +124,7 @@ html, body {
     pointer-events: none;
 }
 
-
-.leaderboard-card {
-    background-color: #FFFFFF;
-    border: 1px solid #EAEAEA;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-}
-
-
-.leaderboard-card h3 {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #F0F0F0;
-    color: #1A1A1A;
-}
-
-
-.leaderboard-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-}
-
-
-.leaderboard-item {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-
-.leaderboard-item img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-
-.leaderboard-item .name {
-    font-size: 14px;
-    font-weight: 700; 
-    color: #1A1A1A;
-    flex: 1;
-}
-
-
-.leaderboard-item .points {
-    font-size: 12px;
-    color: #8C8C8C;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-
-.view-full {
-    display: block;
-    text-align: center;
-    margin-top: 24px;
-    color: var(--accent-orange);
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 700;
-    transition: opacity 0.2s;
-}
-
-.view-full:hover {
-    opacity: 0.8;
-    text-decoration: underline;
-}
-
-
-@media (max-width: 1200px) {
-    .sidebar-right { 
-        display: none; 
-    }
-}
-
-@media (max-width: 850px) {
-    .sidebar-left { 
-        display: none; 
-    }
-
-    .main-content {
-        min-width: 100%;
-        height: 100vh;
-        overflow-y: scroll; 
-        background-color: var(--bg-color);
-    }
-
-    .top-header {
-        padding: 15px 20px;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        width: 100%;
-    }
-
-    .container {
-        padding: 16px;
-        max-width: 100%;
-    }
-
-    
-    .followers-card {
-        border-radius: 12px;
-        padding: 5px;
-    }
-
-    .follower-item {
-        padding: 12px 15px;
-        gap: 12px;
-    }
-
-    .avatar {
-        width: 40px;
-        height: 40px;
-    }
-}
-
-
+/* Scrollbar kustom */
 .main-content::-webkit-scrollbar {
     width: 8px;
 }
@@ -479,4 +136,12 @@ html, body {
 .main-content::-webkit-scrollbar-thumb {
     background: #ccc;
     border-radius: 10px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .follower-item {
+        padding: 12px 15px;
+        gap: 12px;
+    }
 }

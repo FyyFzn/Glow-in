@@ -1,51 +1,52 @@
 <?php
-session_start();
-require_once '../config.php';
+require_once "middleware.php";
+$user = checkApiKey();
+$method = $_SERVER["REQUEST_METHOD"];
+$id = $_GET["id"] ?? null;
 
-// Otorisasi: Harus login
-if (!isset($_SESSION['user_id'])) {
-    die("Unauthorized");
-}
-
-$method = $_SERVER['REQUEST_METHOD'];
-$action = $_REQUEST['action'] ?? '';
-
-if ($method === 'POST') {
-    if ($action === 'create') {
-        $content = $_POST['content'] ?? '';
-        $user_id = $_SESSION['user_id'];
-        
-        if (!empty($content)) {
-            $stmt = $pdo->prepare("INSERT INTO posts (user_id, content) VALUES (?, ?)");
-            $stmt->execute([$user_id, $content]);
+try {
+    if ($method === "GET") {
+        if ($id) {
+            $stmt = $pdo->prepare("SELECT * FROM posts WHERE id = ?");
+            $stmt->execute([$id]);
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        } else {
+            $stmt = $pdo->query("SELECT * FROM posts");
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
-        header("Location: ../home.php");
-        exit();
-        
-    } elseif ($action === 'edit') {
-        $post_id = $_POST['post_id'] ?? 0;
-        $content = $_POST['content'] ?? '';
-        $user_id = $_SESSION['user_id'];
-        
-        if (!empty($content) && $post_id) {
-            // Verify ownership
-            $stmt = $pdo->prepare("UPDATE posts SET content = ? WHERE id = ? AND user_id = ?");
-            $stmt->execute([$content, $post_id, $user_id]);
-        }
-        header("Location: ../home.php");
-        exit();
-        
-    } elseif ($action === 'delete') {
-        $post_id = $_POST['post_id'] ?? 0;
-        $user_id = $_SESSION['user_id'];
-        
-        if ($post_id) {
-            // Verify ownership
-            $stmt = $pdo->prepare("DELETE FROM posts WHERE id = ? AND user_id = ?");
-            $stmt->execute([$post_id, $user_id]);
-        }
-        header("Location: ../home.php");
-        exit();
+        echo json_encode($data);
+    } 
+    elseif ($method === "POST") {
+        $input = json_decode(file_get_contents("php://input"), true) ?: $_POST;
+        $keys = array_keys($input);
+        $fields = implode(", ", $keys);
+        $placeholders = implode(", ", array_fill(0, count($keys), "?"));
+        $stmt = $pdo->prepare("INSERT INTO posts ($fields) VALUES ($placeholders)");
+        $stmt->execute(array_values($input));
+        echo json_encode(["success" => true, "message" => "Data created", "id" => $pdo->lastInsertId()]);
     }
+    elseif ($method === "PUT") {
+        if (!$id) throw new Exception("ID required for PUT");
+        $input = json_decode(file_get_contents("php://input"), true);
+        $sets = [];
+        $values = [];
+        foreach ($input as $key => $val) {
+            $sets[] = "$key = ?";
+            $values[] = $val;
+        }
+        $values[] = $id;
+        $stmt = $pdo->prepare("UPDATE posts SET " . implode(", ", $sets) . " WHERE id = ?");
+        $stmt->execute($values);
+        echo json_encode(["success" => true, "message" => "Data updated"]);
+    }
+    elseif ($method === "DELETE") {
+        if (!$id) throw new Exception("ID required for DELETE");
+        $stmt = $pdo->prepare("DELETE FROM posts WHERE id = ?");
+        $stmt->execute([$id]);
+        echo json_encode(["success" => true, "message" => "Data deleted"]);
+    }
+} catch (Exception $e) {
+    http_response_code(400);
+    echo json_encode(["error" => $e->getMessage()]);
 }
 ?>

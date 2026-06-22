@@ -1,0 +1,748 @@
+/* =============================================================
+   BASE.CSS — Glow-in Shared Styles
+   Berisi: CSS variables, reset, layout, sidebar, tweet-card,
+   rightbar, dan responsive. Digunakan oleh semua halaman.
+   ============================================================= */
+
+/* ===== CSS VARIABLES ===== */
+:root {
+    --bg-color: #F8F6F2;
+    --card-bg: #FFFFFF;
+    --text-primary: #1A1A1A;
+    --text-secondary: #666666;
+    --text-tertiary: #999999;
+    --accent-orange: #ff8c00;
+    --accent-green: #2ecc71;
+    --border-color: #E0E0E0;
+    --sidebar-width-left: 280px;
+    --sidebar-width-right: 360px;
+}
+
+/* ===== RESET ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: #FFFFFF;
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* ===== LAYOUT ===== */
+.hidden-checkbox {
+    display: none;
+}
+
+.menu-toggle-btn,
+.close-btn {
+    display: none;
+    font-size: 24px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+}
+
+.layout {
+    display: flex;
+    max-width: 1600px;
+    margin: 0 auto;
+    height: 100vh;
+}
+
+.container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+/* ===== LEFT SIDEBAR ===== */
+.sidebar-left {
+    width: var(--sidebar-width-left);
+    background-color: #FFFFFF;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    position: relative;
+    z-index: 1000;
+    transition: transform 0.3s ease-out;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--accent-orange);
+    margin-bottom: 40px;
+}
+
+.logo-icon {
+    font-size: 28px;
+}
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 12px 0;
+    text-decoration: none;
+    color: #4A4A4A;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 12px;
+    transition: color 0.2s, background-color 0.2s;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background-color: #F4F7FE;
+    padding-left: 16px;
+    color: var(--text-primary);
+}
+
+.nav-item.active {
+    padding-right: 16px;
+}
+
+.icon-wrapper {
+    position: relative;
+}
+
+.badge {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    background-color: var(--accent-orange);
+    color: #FFFFFF;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    border: 2px solid #FFFFFF;
+    font-weight: 700;
+}
+
+.post-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--accent-orange);
+    color: #FFFFFF;
+    border: none;
+    width: 100%;
+    padding: 16px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: none;
+    cursor: pointer;
+    margin-bottom: 32px;
+    box-shadow: 0 4px 12px rgba(245, 138, 66, 0.3);
+}
+
+.user-profile-mini {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 16px;
+    cursor: pointer;
+    margin-top: auto;
+    background-color: #F8F9FA;
+    position: relative;
+}
+
+.avatar-mini {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-info-mini {
+    flex: 1;
+}
+
+.user-info-mini .name {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.user-info-mini .handle {
+    font-size: 12px;
+    color: var(--text-tertiary);
+}
+
+.menu-dots {
+    color: var(--text-tertiary);
+}
+
+/* ===== INSTAGRAM-STYLE SIDEBAR (DESKTOP ONLY) ===== */
+@media (min-width: 1101px) {
+    .layout {
+        position: relative; /* Agar absolute sidebar sejajar di dalam layout */
+    }
+
+    .sidebar-left {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 2000; /* Ditingkatkan agar di atas top-header (z-index 1000) */
+        width: 88px;
+        padding: 32px 16px;
+        transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease, box-shadow 0.3s ease;
+        overflow-x: hidden;
+        white-space: nowrap;
+        background-color: #FFFFFF;
+    }
+    
+    .sidebar-left:hover {
+        width: var(--sidebar-width-left);
+        padding: 32px;
+        box-shadow: 4px 0 15px rgba(0,0,0,0.08); /* Memberi bayangan agar terlihat melayang di atas konten */
+    }
+
+    .main-content {
+        margin-left: 88px; /* Memberi ruang untuk sidebar saat tertutup */
+    }
+    
+    .sidebar-left:hover {
+        width: var(--sidebar-width-left);
+        padding: 32px;
+    }
+
+    /* Sembunyikan teks secara default */
+    .sidebar-left .logo span,
+    .sidebar-left .nav-item span,
+    .sidebar-left .post-btn span {
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.2s ease;
+        width: 0;
+    }
+
+    /* Munculkan teks saat di-hover */
+    .sidebar-left:hover .logo span,
+    .sidebar-left:hover .nav-item span,
+    .sidebar-left:hover .post-btn span {
+        opacity: 1;
+        visibility: visible;
+        width: auto;
+    }
+
+    /* Pusatkan icon secara default dan buang padding yang menggeser layout */
+    .sidebar-left .logo,
+    .sidebar-left .nav-item,
+    .sidebar-left .user-profile-mini {
+        justify-content: center;
+        padding-left: 0;
+        padding-right: 0;
+        width: 48px;
+        height: 48px;
+        margin-left: auto;
+        margin-right: auto;
+        gap: 0; /* PENTING: Hilangkan gap agar icon benar-benar di tengah */
+    }
+    
+    .sidebar-left .logo {
+        height: auto;
+        margin-bottom: 40px;
+    }
+
+    /* Kembalikan ke format asli saat di-hover */
+    .sidebar-left:hover .logo,
+    .sidebar-left:hover .nav-item,
+    .sidebar-left:hover .user-profile-mini {
+        justify-content: flex-start;
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    
+    .sidebar-left:hover .logo { gap: 12px; }
+    .sidebar-left:hover .nav-item { gap: 18px; padding: 12px 0; }
+    .sidebar-left:hover .user-profile-mini { gap: 12px; }
+    
+    .sidebar-left:hover .nav-item:hover,
+    .sidebar-left:hover .nav-item.active {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .sidebar-left:hover .user-profile-mini {
+        padding: 12px 16px;
+    }
+
+    /* Sembunyikan info user (nama & handle) dan menu dropdown */
+    .sidebar-left .user-info-mini,
+    .sidebar-left .post-dropdown {
+        display: none;
+    }
+
+    .sidebar-left:hover .user-info-mini,
+    .sidebar-left:hover .post-dropdown {
+        display: block;
+    }
+    
+    /* Tombol Post melingkar saat kecil */
+    .sidebar-left .post-btn {
+        width: 48px;
+        height: 48px;
+        padding: 0;
+        border-radius: 50%;
+        margin: 0 auto 32px auto;
+        color: transparent; /* Sembunyikan teks asli */
+        position: relative;
+    }
+    
+    .sidebar-left .post-btn::after {
+        content: '+'; /* Ganti dengan icon plus */
+        color: white;
+        position: absolute;
+        font-size: 24px;
+    }
+
+    .sidebar-left:hover .post-btn {
+        width: 100%;
+        border-radius: 30px;
+        padding: 16px;
+        color: white;
+    }
+    
+    .sidebar-left:hover .post-btn::after {
+        display: none;
+    }
+}
+
+/* ===== DROPDOWN (Sidebar & Post) ===== */
+.post-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.post-dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: #ffffff;
+    min-width: 120px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    border-radius: 8px;
+    border: 1px solid #eaeaea;
+    overflow: hidden;
+}
+
+.post-dropdown-content a,
+.post-dropdown-content button {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.post-dropdown-content a:hover,
+.post-dropdown-content button:hover {
+    background-color: #f4f7fe;
+    color: var(--accent-orange);
+}
+
+.post-dropdown-content.show {
+    display: block;
+}
+
+.post-dropdown-btn {
+    background: none;
+    border: none;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.post-dropdown-btn:hover {
+    color: var(--text-primary);
+    background-color: #f4f7fe;
+}
+
+/* ===== MAIN CONTENT ===== */
+.main-content {
+    flex: 1;
+    background-color: var(--bg-color);
+    border-left: 1px solid #EEEEEE;
+    border-right: 1px solid #EEEEEE;
+    overflow-y: auto;
+}
+
+.top-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 24px 40px;
+    background-color: #FFFFFF;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid #EEEEEE;
+}
+
+.top-header h1 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--text-primary);
+}
+
+/* ===== TWEET / POST CARD ===== */
+.tweet-card {
+    background-color: var(--card-bg);
+    border-radius: 20px;
+    padding: 24px;
+    margin: 8px 0 16px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+}
+
+.click-post {
+    text-decoration: none;
+    color: inherit;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.post-user-info {
+    flex: 1;
+}
+
+.post-user-info .name {
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.post-user-info .handle {
+    color: var(--text-tertiary);
+    font-size: 14px;
+}
+
+.post-body {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+
+.post-body.bold {
+    font-weight: 700;
+    color: var(--text-secondary);
+    padding-top: 10px;
+}
+
+.tweet-media {
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+
+.tweet-media img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 16px;
+}
+
+.tweet-actions {
+    display: flex;
+    gap: 20px;
+    color: var(--text-tertiary);
+    justify-content: space-around;
+    font-size: 14px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+.tweet-actions .item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.follow-btn {
+    background: none;
+    border: 1px solid #E0E0E0;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    color: var(--text-primary);
+}
+
+/* ===== RIGHT SIDEBAR ===== */
+.search-bar-desktop {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: var(--light-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    margin-bottom: 25px;
+    color: #888;
+}
+
+.search-bar-desktop i {
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+.search-bar-desktop input {
+    border: none;
+    padding: 0;
+    outline: none;
+    background: transparent;
+    flex-grow: 1;
+    font-size: 14px;
+}
+
+.sidebar-right {
+    width: var(--sidebar-width-right);
+    padding: 24px;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.leaderboard-card {
+    background-color: #FFFFFF;
+    border: 1px solid #EAEAEA;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.leaderboard-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #F0F0F0;
+    color: #1A1A1A;
+}
+
+.leaderboard-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.leaderboard-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.leaderboard-item img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.leaderboard-item .name {
+    font-size: 14px;
+    font-weight: 600;
+    flex: 1;
+}
+
+.leaderboard-item .points {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    font-weight: 500;
+}
+
+.view-full {
+    display: block;
+    text-align: center;
+    margin-top: 24px;
+    color: var(--accent-orange);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ===== OVERLAY ===== */
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 90;
+    display: none;
+    cursor: pointer;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1100px) {
+    .layout {
+        flex-wrap: wrap;
+    }
+
+    body {
+        overflow-y: auto;
+    }
+
+    .sidebar-left {
+        width: 280px;
+        position: fixed;
+        height: 100vh;
+        left: 0;
+        top: 0;
+        transform: translateX(-100%);
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+        padding: 32px;
+    }
+
+    .sidebar-left .logo span,
+    .sidebar-left .nav-item span,
+    .sidebar-left .user-profile-mini {
+        display: flex;
+    }
+
+    .sidebar-left .logo {
+        justify-content: flex-start;
+        margin-bottom: 40px;
+    }
+
+    .main-content {
+        flex: 1;
+    }
+
+    .top-header {
+        display: flex;
+        align-items: center;
+        padding: 24px 40px;
+        background-color: #FFFFFF;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        border-bottom: 1px solid #EEEEEE;
+    }
+
+    .menu-toggle-btn {
+        display: block;
+        margin-right: 16px;
+    }
+
+    .close-btn {
+        display: block;
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        color: var(--text-tertiary);
+    }
+
+    #menu-toggle:checked ~ .layout .sidebar-left {
+        transform: translateX(0);
+    }
+
+    #menu-toggle:checked ~ #overlay {
+        display: block;
+        background: none;
+    }
+
+    .container {
+        padding: 0 32px;
+    }
+}
+
+@media (max-width: 950px) {
+    .sidebar-right {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        overflow-y: auto;
+    }
+
+    .top-header {
+        padding: 16px;
+    }
+
+    .container {
+        padding: 0 16px;
+    }
+
+    .main-content {
+        margin-bottom: 60px;
+        border-left: none;
+        border-right: none;
+        overflow: visible;
+    }
+
+    .tweet-card:last-child {
+        padding-bottom: 16px;
+        margin-bottom: 100px;
+    }
+
+    .tweet-actions {
+        display: flex !important;
+        justify-content: space-around;
+        margin-top: 12px;
+        gap: 20px;
+    }
+
+    #menu-toggle:checked ~ #overlay {
+        display: block;
+        background: rgba(0, 0, 0, 0.5);
+    }
+}

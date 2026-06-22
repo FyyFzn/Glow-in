@@ -20,7 +20,17 @@ if ($method === 'POST') {
             $_SESSION['username'] = $user['username'];
             $_SESSION['name'] = $user['name'] ?: $user['username'];
             $_SESSION['profile_pic'] = $user['profile_pic'] ?: 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?auto=format&fit=crop&w=200&q=80';
-            header("Location: ../home.php");
+            $_SESSION['role'] = $user['role'];
+            $_SESSION['api_key'] = $user['api_key'];
+            
+            // Redirect based on role
+            if ($user['role'] === 'admin') {
+                header("Location: ../admin/index.php");
+            } elseif ($user['role'] === 'spesialis') {
+                header("Location: ../spesialis/index.php");
+            } else {
+                header("Location: ../home.php");
+            }
             exit();
         } else {
             echo "<script>alert('Username atau Password salah!'); window.location.href='../login.php';</script>";
@@ -46,13 +56,14 @@ if ($method === 'POST') {
             exit();
         }
 
-        // Hash password
+        // Hash password and generate API Key
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $api_key = bin2hex(random_bytes(16));
         
         try {
             // Insert into database
-            $stmt = $pdo->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
-            if ($stmt->execute([$username, $hashed_password])) {
+            $stmt = $pdo->prepare("INSERT INTO users (username, password, api_key, role) VALUES (?, ?, ?, 'postinger')");
+            if ($stmt->execute([$username, $hashed_password, $api_key])) {
                 header("Location: ../register.php?success=1");
                 exit();
             } else {

@@ -18,6 +18,7 @@ if (!isset($_SESSION['user_id'])) {
 
   <!-- CSS -->
   <link rel="stylesheet" href="assets/CSS/post.css" />
+  <link rel="stylesheet" href="assets/CSS/base.css?v=4" />
 </head>
 
 <body>

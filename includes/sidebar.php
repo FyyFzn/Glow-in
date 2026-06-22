@@ -1,67 +1,7 @@
 <?php
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
-<style>
-/* Dropdown Menu Styles */
-.post-dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.post-dropdown-content {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 100%;
-    background-color: #ffffff;
-    min-width: 120px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
-    z-index: 10;
-    border-radius: 8px;
-    border: 1px solid #eaeaea;
-    overflow: hidden;
-}
-
-.post-dropdown-content a,
-.post-dropdown-content button {
-    color: #333;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    width: 100%;
-    text-align: left;
-    background: none;
-    border: none;
-    font-size: 14px;
-    cursor: pointer;
-    font-family: inherit;
-}
-
-.post-dropdown-content a:hover,
-.post-dropdown-content button:hover {
-    background-color: #f4f7fe;
-    color: var(--accent-orange);
-}
-
-.post-dropdown-content.show {
-    display: block;
-}
-
-.post-dropdown-btn {
-    background: none;
-    border: none;
-    color: var(--text-tertiary);
-    cursor: pointer;
-    padding: 8px;
-    font-size: 16px;
-    border-radius: 50%;
-    transition: background-color 0.2s;
-}
-.post-dropdown-btn:hover {
-    color: var(--text-primary);
-    background-color: #f4f7fe;
-}
-</style>
+<!-- Dropdown styles sudah dipindah ke base.css -->
         <aside class="sidebar-left">
             <div class="logo">
                 <i class="fa-solid fa-message logo-icon"></i>
@@ -100,7 +40,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <span>Profile</span>
                 </a>
             </nav>
-            <a href="post.php" class="post-btn" style="text-decoration: none; display: flex; justify-content: center; align-items: center;">Post</a>
+            <a href="post.php" class="post-btn" style="text-decoration: none; display: flex; justify-content: center; align-items: center;"><span>Post</span></a>
 
             <div class="user-profile-mini" style="position: relative;">
                 <img src="<?php echo htmlspecialchars($_SESSION['profile_pic'] ?? 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?auto=format&fit=crop&w=200&q=80'); ?>"

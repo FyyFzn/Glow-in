@@ -34,12 +34,10 @@ if ($is_comment) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Glow-in | <?php echo $is_comment ? 'Add Comment' : 'Edit Post'; ?></title>
 
-  <!-- ICON & FONT -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
   <!-- CSS -->
+  <link rel="stylesheet" href="assets/CSS/base.css?v=4" />
   <link rel="stylesheet" href="assets/CSS/post.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 </head>
 
 <body>

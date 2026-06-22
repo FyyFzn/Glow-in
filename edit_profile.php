@@ -23,36 +23,12 @@ if (!$user) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Glow-in | Edit Profile</title>
 
-  <!-- ICON & FONT -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
   <!-- CSS -->
+  <link rel="stylesheet" href="assets/CSS/base.css?v=4" />
   <link rel="stylesheet" href="assets/CSS/post.css" />
-  <style>
-    .form-group {
-        margin-bottom: 15px;
-    }
-    .form-group label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: 600;
-        color: #333;
-    }
-    .form-group input, .form-group textarea {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        font-family: inherit;
-        font-size: 14px;
-        box-sizing: border-box;
-    }
-    .form-group input:focus, .form-group textarea:focus {
-        outline: none;
-        border-color: var(--accent-orange, #ff6b00);
-    }
-  </style>
+  <!-- ICON & FONT -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -74,44 +50,71 @@ if (!$user) {
 
     <div class="container">
 
-      <form action="api/users.php" method="POST" class="post-card">
-        <input type="hidden" name="action" value="update_profile">
-        
+      <form id="edit-profile-form" class="post-card">
         <div class="form-group">
-            <label>Name Depan</label>
-            <input type="text" name="name" value="<?= htmlspecialchars($user['name'] ?? '') ?>" placeholder="Your display name">
-        </div>
-
-        <div class="form-group">
-            <label>Nama Belakang</label>
-            <input type="text" name="nameback" value="<?= htmlspecialchars($user['nameback'] ?? '') ?>" placeholder="Your display name">
+            <label>Name</label>
+            <input type="text" name="name" id="profile-name" value="<?= htmlspecialchars($user['name'] ?? '') ?>" placeholder="Your display name">
         </div>
 
         <div class="form-group">
             <label>Bio</label>
-            <textarea name="bio" rows="3" placeholder="Tell us about yourself"><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
+            <textarea name="bio" id="profile-bio" rows="3" placeholder="Tell us about yourself"><?= htmlspecialchars($user['bio'] ?? '') ?></textarea>
         </div>
 
         <div class="form-group">
             <label>Location</label>
-            <input type="text" name="location" value="<?= htmlspecialchars($user['location'] ?? '') ?>" placeholder="e.g. Jakarta, Indonesia">
+            <input type="text" name="location" id="profile-location" value="<?= htmlspecialchars($user['location'] ?? '') ?>" placeholder="e.g. Jakarta, Indonesia">
         </div>
 
         <div class="form-group">
             <label>Profile Picture URL</label>
-            <input type="url" name="profile_pic" value="<?= htmlspecialchars($user['profile_pic'] ?? '') ?>" placeholder="https://example.com/image.jpg">
+            <input type="url" name="profile_pic" id="profile-pic" value="<?= htmlspecialchars($user['profile_pic'] ?? '') ?>" placeholder="https://example.com/image.jpg">
         </div>
 
         <div class="form-group">
             <label>Header / Cover URL</label>
-            <input type="url" name="header_pic" value="<?= htmlspecialchars($user['header_pic'] ?? '') ?>" placeholder="https://example.com/cover.jpg">
+            <input type="url" name="header_pic" id="profile-header" value="<?= htmlspecialchars($user['header_pic'] ?? '') ?>" placeholder="https://example.com/cover.jpg">
         </div>
 
         <div class="post-actions" style="margin-top: 20px;">
           <a href="profile.php" class="btn cancel" style="text-decoration:none; text-align:center; display:inline-block; padding:8px 16px;">Cancel</a>
-          <button type="submit" class="btn submit">Save Profile</button>
+          <button type="button" class="btn submit" onclick="saveProfile()">Save Profile</button>
         </div>
       </form>
+
+<script>
+    const apiKey = "<?= $_SESSION['api_key'] ?? '' ?>";
+    const currentUserId = <?= $_SESSION['user_id'] ?? 0 ?>;
+
+    function saveProfile() {
+        const payload = {
+            name: document.getElementById('profile-name').value,
+            bio: document.getElementById('profile-bio').value,
+            location: document.getElementById('profile-location').value,
+            profile_pic: document.getElementById('profile-pic').value,
+            header_pic: document.getElementById('profile-header').value
+        };
+
+        fetch('api/users.php?id=' + currentUserId, {
+            method: 'PUT',
+            headers: {
+                'Authorization': 'Bearer ' + apiKey,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                alert("Profile berhasil diperbarui!");
+                window.location.href = 'profile.php';
+            } else {
+                alert("Error: " + data.error);
+            }
+        })
+        .catch(err => alert("Gagal menyimpan profil: " + err));
+    }
+</script>
 
     </div>
   </main>

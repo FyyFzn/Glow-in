@@ -7,11 +7,11 @@ $id = $_GET["id"] ?? null;
 try {
     if ($method === "GET") {
         if ($id) {
-            $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+            $stmt = $pdo->prepare("SELECT * FROM schedules WHERE id = ?");
             $stmt->execute([$id]);
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
         } else {
-            $stmt = $pdo->query("SELECT * FROM users");
+            $stmt = $pdo->query("SELECT * FROM schedules");
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
         echo json_encode($data);
@@ -21,7 +21,7 @@ try {
         $keys = array_keys($input);
         $fields = implode(", ", $keys);
         $placeholders = implode(", ", array_fill(0, count($keys), "?"));
-        $stmt = $pdo->prepare("INSERT INTO users ($fields) VALUES ($placeholders)");
+        $stmt = $pdo->prepare("INSERT INTO schedules ($fields) VALUES ($placeholders)");
         $stmt->execute(array_values($input));
         echo json_encode(["success" => true, "message" => "Data created", "id" => $pdo->lastInsertId()]);
     }
@@ -35,13 +35,13 @@ try {
             $values[] = $val;
         }
         $values[] = $id;
-        $stmt = $pdo->prepare("UPDATE users SET " . implode(", ", $sets) . " WHERE id = ?");
+        $stmt = $pdo->prepare("UPDATE schedules SET " . implode(", ", $sets) . " WHERE id = ?");
         $stmt->execute($values);
         echo json_encode(["success" => true, "message" => "Data updated"]);
     }
     elseif ($method === "DELETE") {
         if (!$id) throw new Exception("ID required for DELETE");
-        $stmt = $pdo->prepare("DELETE FROM users WHERE id = ?");
+        $stmt = $pdo->prepare("DELETE FROM schedules WHERE id = ?");
         $stmt->execute([$id]);
         echo json_encode(["success" => true, "message" => "Data deleted"]);
     }

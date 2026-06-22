@@ -1,0 +1,37 @@
+/* =============================================================
+   HOME.CSS — Styles khusus halaman Home (Feed utama)
+   Membutuhkan: base.css
+   ============================================================= */
+
+/* Tab navigasi "For you / Following" */
+.main-nav-tabs {
+    display: flex;
+}
+
+.main-nav-tabs .tab {
+    padding: 0 30px;
+    margin: 0 20px;
+    border-bottom: 3px solid transparent;
+    text-decoration: none;
+    color: inherit;
+}
+
+.main-nav-tabs .tab:hover {
+    color: var(--accent-orange);
+}
+
+.main-nav-tabs .tab.active {
+    font-weight: bold;
+    padding-bottom: 10px;
+    margin: 0 20px;
+    border-bottom: 3px solid var(--accent-orange);
+    color: var(--accent-orange);
+}
+
+@media (max-width: 1100px) {
+    .main-nav-tabs {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+}

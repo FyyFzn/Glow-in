@@ -17,6 +17,7 @@ if (!isset($_SESSION['user_id'])) {
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
   <!-- CSS -->
+  <link rel="stylesheet" href="assets/CSS/base.css?v=6" />
   <link rel="stylesheet" href="assets/CSS/leaderboard.css" />
 </head>
 <body>
@@ -43,15 +44,16 @@ if (!isset($_SESSION['user_id'])) {
       <select><option>Top 10 Users</option></select>
     </div>
 
-    <div class="rank-card">
+    <!-- Your Rank Card disembunyikan sementara sampai API Rank dibuat -->
+    <div class="rank-card" style="display:none;">
       <div class="rank-left">
-        <span class="rank-number">125</span>
+        <span class="rank-number">-</span>
         <div>
           <p class="rank-label">Your Rank</p>
-          <p class="rank-name">You (John Doe)</p>
+          <p class="rank-name"><?= htmlspecialchars($_SESSION['username'] ?? 'You') ?></p>
         </div>
       </div>
-      <div class="rank-points">4,500 points</div>
+      <div class="rank-points">- points</div>
     </div>
 
     <div class="table">
@@ -61,15 +63,48 @@ if (!isset($_SESSION['user_id'])) {
         <span class="right">Points</span>
       </div>
 
-      <div class="row"><span>1</span><span class="user"><img src="avatar.png">Alex Johnson</span><span class="right">15,400</span></div>
-      <div class="row"><span>2</span><span class="user"><img src="avatar.png">Maria Gonzalez</span><span class="right">14,980</span></div>
-      <div class="row"><span>3</span><span class="user"><img src="avatar.png">David Lee</span><span class="right">14,500</span></div>
-      <div class="row"><span>4</span><span class="user"><img src="avatar.png">Sophia Chen</span><span class="right">13,800</span></div>
-      <div class="row"><span>5</span><span class="user"><img src="avatar.png">Ethan Wright</span><span class="right">13,200</span></div>
+      <div id="leaderboard-table-body">
+        <p style="text-align: center; color: #999; padding: 20px;">Memuat leaderboard...</p>
+      </div>
     </div>
     </div>
   </main>
 <?php require_once 'includes/footer.php'; ?>
+
+<script>
+(function() {
+    const apiLeaderboardKey = "<?= $_SESSION['api_key'] ?? '' ?>";
+    fetch('api/leaderboard.php', {
+        headers: { 'Authorization': 'Bearer ' + apiLeaderboardKey }
+    })
+    .then(res => res.json())
+    .then(data => {
+        const tbody = document.getElementById('leaderboard-table-body');
+        if(data.error || data.length === 0) {
+            tbody.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">Belum ada data</p>';
+            return;
+        }
+        tbody.innerHTML = '';
+        data.forEach((user, index) => {
+            tbody.innerHTML += `
+            <div class="row">
+                <span>${index + 1}</span>
+                <span class="user">
+                    <img src="${user.profile_pic || 'https://via.placeholder.com/40'}" alt="${user.username}">
+                    ${user.username}
+                </span>
+                <span class="right">
+                    ${user.points} 
+                    <a href="chat.php?user=${user.id}" style="margin-left:15px; color:#f26600; text-decoration:none;" title="Mulai Chat"><i class="fa-regular fa-comment"></i></a>
+                </span>
+            </div>`;
+        });
+    })
+    .catch(err => console.error('Error fetching leaderboard:', err));
+})();
+</script>
+</body>
+</html>
 
 
 

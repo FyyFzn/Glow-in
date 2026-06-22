@@ -5,38 +5,37 @@
             </div>
             <div class="leaderboard-card">
                 <h3>Leaderboard</h3>
-                <ul class="leaderboard-list">
-                    <li class="leaderboard-item">
-                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
-                            alt="LunaStar">
-                        <span class="name">LunaStar</span>
-                        <span class="points">1250 pts</span>
-                    </li>
-                    <li class="leaderboard-item">
-                        <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
-                            alt="PixelForge">
-                        <span class="name">PixelForge</span>
-                        <span class="points">1180 pts</span>
-                    </li>
-                    <li class="leaderboard-item">
-                        <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
-                            alt="CodeWhisper">
-                        <span class="name">CodeWhisper</span>
-                        <span class="points">1020 pts</span>
-                    </li>
-                    <li class="leaderboard-item">
-                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
-                            alt="DesignFlow">
-                        <span class="name">DesignFlow</span>
-                        <span class="points">950 pts</span>
-                    </li>
-                    <li class="leaderboard-item">
-                        <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80"
-                            alt="DataPilot">
-                        <span class="name">DataPilot</span>
-                        <span class="points">880 pts</span>
-                    </li>
+                <ul class="leaderboard-list" id="rightbar-leaderboard">
+                    <!-- Data leaderboard akan dirender di sini oleh Javascript -->
+                    <p style="text-align: center; color: #999; font-size: 13px;">Memuat...</p>
                 </ul>
                 <a href="leaderboard.php" class="view-full">View Full Leaderboard</a>
             </div>
         </aside>
+
+<script>
+(function() {
+    const apiLeaderboardKey = "<?= $_SESSION['api_key'] ?? '' ?>";
+    fetch('api/leaderboard.php', {
+        headers: { 'Authorization': 'Bearer ' + apiLeaderboardKey }
+    })
+    .then(res => res.json())
+    .then(data => {
+        const list = document.getElementById('rightbar-leaderboard');
+        if(data.error || data.length === 0) {
+            list.innerHTML = '<p style="text-align: center; color: #999; font-size: 13px;">Belum ada data</p>';
+            return;
+        }
+        list.innerHTML = '';
+        data.forEach(user => {
+            list.innerHTML += `
+            <li class="leaderboard-item">
+                <img src="${user.profile_pic || 'https://via.placeholder.com/100'}" alt="${user.username}">
+                <span class="name">${user.username}</span>
+                <span class="points">${user.points} pts</span>
+            </li>`;
+        });
+    })
+    .catch(err => console.error('Error fetching leaderboard:', err));
+})();
+</script>

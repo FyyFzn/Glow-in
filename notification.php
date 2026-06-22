@@ -11,7 +11,8 @@ if (!isset($_SESSION['user_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glow-in Mockup (HTML/CSS Only)</title>
+    <title>Glow-in | Notifications</title>
+    <link rel="stylesheet" href="./assets/CSS/base.css?v=4">
     <link rel="stylesheet" href="./assets/CSS/notification.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -33,132 +34,61 @@ if (!isset($_SESSION['user_id'])) {
 
             <div class="container">
                 <article class="tweet-card">
-                    <ul class="notification-list">
-                        <li class="notification-item">
-                            <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?q=80&w=2342&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Avatar Lucy" class="avatar-notif">
-                            <div class="notification-content">
-                                <span class="user-name">Lucy Adams</span>
-                                <span class="action-text">menyukai postingan Anda.</span>
-                                <p class="post-snippet">butuh lebih banyak libas ke chekien youtamanent.</p>
-                            </div>
-                            <span class="timestamp">5 menit yang lalu</span>
-                        </li>
-
-                        <li class="notification-item">
-                            <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?q=80&w=2342&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Avatar Miles" class="avatar-notif">
-                            <div class="notification-content">
-                                <span class="user-name">Miles Peters</span>
-                                <span class="action-text">mulai mengikuti Anda.</span>
-                            </div>
-                            <span class="timestamp">20 menit yang lalu</span>
-                        </li>
-
-                        <li class="notification-item">
-                            <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?q=80&w=2342&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Avatar Ethan" class="avatar-notif">
-                            <div class="notification-content">
-                                <span class="user-name">Ethan Wright</span>
-                                <span class="action-text">mengomentari postingan Anda.</span>
-                                <p class="post-snippet">Gambar yang bagus! (Pertahankan!) 🙌</p>
-                            </div>
-                            <span class="timestamp">45 menit yang lalu</span>
-                        </li>
-                        
-                        <li class="notification-item">
-                            <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?q=80&w=2342&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Avatar Ethan" class="avatar-notif">
-                            <div class="notification-content">
-                                <span class="user-name">Ethan Wright</span>
-                                <span class="action-text">mengomentari postingan Anda.</span>
-                                <p class="post-snippet">Gambar yang bagus! (Pertahankan!) 🙌</p>
-                            </div>
-                            <span class="timestamp">45 menit yang lalu</span>
-                        </li>
-                        
-                        <li class="notification-item">
-                            <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?q=80&w=2342&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Avatar Ethan" class="avatar-notif">
-                            <div class="notification-content">
-                                <span class="user-name">Ethan Wright</span>
-                                <span class="action-text">mengomentari postingan Anda.</span>
-                                <p class="post-snippet">Gambar yang bagus! (Pertahankan!) 🙌</p>
-                            </div>
-                            <span class="timestamp">45 menit yang lalu</span>
-                        </li>
-                        
-                        <li class="notification-item">
-                            <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?q=80&w=2342&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Avatar Ethan" class="avatar-notif">
-                            <div class="notification-content">
-                                <span class="user-name">Ethan Wright</span>
-                                <span class="action-text">mengomentari postingan Anda.</span>
-                                <p class="post-snippet">Gambar yang bagus! (Pertahankan!) 🙌</p>
-                            </div>
-                            <span class="timestamp">45 menit yang lalu</span>
-                        </li>
-                        
-                        <li class="notification-item">
-                            <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?q=80&w=2342&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Avatar Ethan" class="avatar-notif">
-                            <div class="notification-content">
-                                <span class="user-name">Ethan Wright</span>
-                                <span class="action-text">mengomentari postingan Anda.</span>
-                                <p class="post-snippet">Gambar yang bagus! (Pertahankan!) 🙌</p>
-                            </div>
-                            <span class="timestamp">45 menit yang lalu</span>
-                        </li>
-                        
-                        <li class="notification-item">
-                            <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?q=80&w=2342&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Avatar Ethan" class="avatar-notif">
-                            <div class="notification-content">
-                                <span class="user-name">Ethan Wright</span>
-                                <span class="action-text">mengomentari postingan Anda.</span>
-                                <p class="post-snippet">Gambar yang bagus! (Pertahankan!) 🙌</p>
-                            </div>
-                            <span class="timestamp">45 menit yang lalu</span>
-                        </li>
-                        
-                        <li class="notification-item">
-                            <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?q=80&w=2342&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Avatar Ethan" class="avatar-notif">
-                            <div class="notification-content">
-                                <span class="user-name">Ethan Wright</span>
-                                <span class="action-text">mengomentari postingan Anda.</span>
-                                <p class="post-snippet">Gambar yang bagus! (Pertahankan!) 🙌</p>
-                            </div>
-                            <span class="timestamp">45 menit yang lalu</span>
-                        </li>
-                        
-                        <li class="notification-item">
-                            <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?q=80&w=2342&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Avatar Ethan" class="avatar-notif">
-                            <div class="notification-content">
-                                <span class="user-name">Ethan Wright</span>
-                                <span class="action-text">mengomentari postingan Anda.</span>
-                                <p class="post-snippet">Gambar yang bagus! (Pertahankan!) 🙌</p>
-                            </div>
-                            <span class="timestamp">45 menit yang lalu</span>
-                        </li>
-                        
-                        <li class="notification-item">
-                            <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?q=80&w=2342&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Avatar Ethan" class="avatar-notif">
-                            <div class="notification-content">
-                                <span class="user-name">Ethan Wright</span>
-                                <span class="action-text">mengomentari postingan Anda.</span>
-                                <p class="post-snippet">Gambar yang bagus! (Pertahankan!) 🙌</p>
-                            </div>
-                            <span class="timestamp">45 menit yang lalu</span>
-                        </li>
-                        
-                        <li class="notification-item">
-                            <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?q=80&w=2342&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Avatar Ethan" class="avatar-notif">
-                            <div class="notification-content">
-                                <span class="user-name">Ethan Wright</span>
-                                <span class="action-text">mengomentari postingan Anda.</span>
-                                <p class="post-snippet">Gambar yang bagus! (Pertahankan!) 🙌</p>
-                            </div>
-                            <span class="timestamp">45 menit yang lalu</span>
-                        </li>
-
+                    <ul id="notifications-container" class="notification-list">
+                        <!-- Data akan dirender oleh Javascript -->
+                        <p style="text-align: center; color: #999;">Memuat...</p>
                     </ul>
                 </article>
-
             </div>
         </main>
 
 <?php require_once 'includes/rightbar.php'; ?>
 <?php require_once 'includes/footer.php'; ?>
 
+<script>
+    const apiKey = "<?= $_SESSION['api_key'] ?? '' ?>";
+
+    function loadNotifications() {
+        fetch('api/notifications.php', {
+            headers: { 'Authorization': 'Bearer ' + apiKey }
+        })
+        .then(res => res.json())
+        .then(data => {
+            const container = document.getElementById('notifications-container');
+            if(data.error || data.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #999;">Belum ada notifikasi</p>';
+                return;
+            }
+            container.innerHTML = '';
+            data.forEach(notif => {
+                let actionText = "";
+                if(notif.type == 'like') actionText = "menyukai postingan Anda.";
+                else if(notif.type == 'comment') actionText = "mengomentari postingan Anda.";
+                else if(notif.type == 'follow') actionText = "mulai mengikuti Anda.";
+                else actionText = "berinteraksi dengan Anda.";
+                
+                const date = new Date(notif.created_at).toLocaleString('id-ID');
+
+                container.innerHTML += `
+                <li class="notification-item ${notif.is_read == 0 ? 'unread' : ''}">
+                    <img src="${notif.profile_pic || 'https://via.placeholder.com/40'}" alt="Avatar" class="avatar-notif">
+                    <div class="notification-content">
+                        <span class="user-name">${notif.username}</span>
+                        <span class="action-text">${actionText}</span>
+                    </div>
+                    <span class="timestamp">${date}</span>
+                </li>`;
+            });
+            
+            // Mark as read after load
+            fetch('api/notifications.php', {
+                method: 'PUT',
+                headers: { 'Authorization': 'Bearer ' + apiKey }
+            });
+        });
+    }
+
+    loadNotifications();
+</script>
+</body>
+</html>
