@@ -128,3 +128,25 @@ INSERT INTO users (username, password, name, bio, location, role, points, api_ke
 ('mikejohnson', '$2y$10$YourHashedPasswordHere5', 'Mike Johnson', 'Tech Enthusiast', 'Medan', 'postinger', 1600, 'api_mikejohnson345'),
 ('emilydavis', '$2y$10$YourHashedPasswordHere6', 'Emily Davis', 'Photographer', 'Semarang', 'spesialis', 1900, 'api_emilydavis678'),
 ('admin', '$2y$10$YourHashedPasswordHere7', 'Admin', 'Administrator', 'Jakarta', 'admin', 0, 'api_admin901');
+
+-- 11. Likes
+CREATE TABLE IF NOT EXISTS likes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    post_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE,
+    UNIQUE(user_id, post_id)
+);
+
+-- 12. Follows
+CREATE TABLE IF NOT EXISTS follows (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    follower_id INT NOT NULL,
+    following_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (follower_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (following_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE(follower_id, following_id)
+);
