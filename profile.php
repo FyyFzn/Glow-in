@@ -1,145 +1,166 @@
 <?php
 session_start();
+require_once 'config.php';
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
 }
-
-require_once 'config.php';
-
-// Fetch user data
-$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
-$stmt->execute([$_SESSION['user_id']]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if (!$user) {
-    die("User not found.");
-}
-
-$displayName = !empty($user['name']) ? $user['name'] : $user['username'];
-$bio = !empty($user['bio']) ? $user['bio'] : 'No bio available.';
-$location = !empty($user['location']) ? $user['location'] : 'Unknown location';
-$joinedDate = date('F Y', strtotime($user['created_at']));
-$profilePic = !empty($user['profile_pic']) ? $user['profile_pic'] : 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?auto=format&fit=crop&w=200&q=80';
-$headerPic = !empty($user['header_pic']) ? $user['header_pic'] : 'https://images.unsplash.com/photo-1505839673365-e3971f8d9184?auto=format&fit=crop&w=1400&q=80';
 ?>
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glow-in | Profile</title>
-    <link rel="stylesheet" href="assets/CSS/base.css?v=4">
+    <title>Profile - Glow-in</title>
+    <link rel="stylesheet" href="assets/CSS/base.css?v=6">
     <link rel="stylesheet" href="assets/CSS/profile.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght400;500;600;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
-    <input type="checkbox" id="menu-toggle" class="hidden-checkbox">
+<input type="checkbox" id="menu-toggle" class="hidden-checkbox">
 
-    <div class="layout">
-<?php require_once 'includes/sidebar.php'; ?>
+<div class="layout">
+    <?php require_once 'includes/sidebar.php'; ?>
 
-        <main class="main-content">
-            <header class="top-header">
-                <label for="menu-toggle" class="menu-toggle-btn" aria-label="Buka Menu">
-                    <i class="fa-solid fa-bars"></i>
-                </label>
-                <h1>Profile</h1>
-            </header>
+    <main class="main-content">
+        <header class="top-header">
+            <label for="menu-toggle" class="menu-toggle-btn">
+                <i class="fa-solid fa-bars"></i>
+            </label>
+            <h1>Profile</h1>
+        </header>
 
-            <div class="container">
-                <div class="profile-card">
-                    <div class="profile-cover">
-                        <img src="<?= htmlspecialchars($headerPic) ?>" alt="Cover">
+        <div class="container">
+            <div class="profile-card">
+                <div class="profile-cover" id="profile-cover">
+                    <!-- Header pic will be loaded via API -->
+                </div>
+                <div class="profile-inner">
+                    <div class="profile-header">
+                        <img class="avatar-large" id="profile-avatar" src="" alt="Avatar">
+                        <div class="profile-info">
+                            <div class="profile-name-row">
+                                <span class="profile-name" id="profile-name"></span>
+                                <i class="fa-solid fa-circle-check verified-badge"></i>
+                            </div>
+                            <div class="profile-handle" id="profile-handle"></div>
+                        </div>
+                        <div class="profile-actions">
+                            <a href="edit_profile.php" class="btn btn-message">Edit Profile</a>
+                        </div>
                     </div>
-                    <div class="profile-inner">
-                        <div class="profile-header">
-                            <img class="avatar-large" src="<?= htmlspecialchars($profilePic) ?>" alt="Avatar">
-                            <div class="profile-info">
-                                <div class="profile-name-row">
-                                    <span class="profile-name"><?= htmlspecialchars($displayName) ?></span>
-                                    <i class="fa-solid fa-circle-check verified-badge"></i>
-                                </div>
-                                <div class="profile-handle">@<?= htmlspecialchars($user['username']) ?></div>
-                            </div>
-                            <div class="profile-actions">
-                                <a href="edit_profile.php" class="btn btn-message" style="text-decoration:none;">Edit Profile</a>
-                            </div>
-                        </div>
 
-                        <p class="profile-bio">
-                            <?= nl2br(htmlspecialchars($bio)) ?>
-                        </p>
-                        <div class="profile-meta">
-                            <span><i class="fa-regular fa-calendar"></i> Joined <?= htmlspecialchars($joinedDate) ?></span>
-                            <span><i class="fa-solid fa-location-dot"></i> <?= htmlspecialchars($location) ?></span>
-                        </div>
-                        <div class="profile-stats">
-                            <a href="following.php" class="mutual-tab"><span class="count">2,114</span> Following</a>
-                            <a href="followers.php" class="mutual-tab"><span class="count">98,400</span> Followers</a>
-                        </div>
+                    <p class="profile-bio" id="profile-bio"></p>
+                    <div class="profile-meta">
+                        <span><i class="fa-regular fa-calendar"></i> Joined <span id="profile-joined"></span></span>
+                        <span><i class="fa-solid fa-location-dot"></i> <span id="profile-location"></span></span>
+                    </div>
+                    <div class="profile-stats">
+                        <a href="following.php" class="mutual-tab"><span class="count">10</span> Following</a>
+                        <a href="followers.php" class="mutual-tab"><span class="count">10</span> Followers</a>
+                    </div>
 
-                        <div class="profile-tabs">
-                            <a href="#" class="profile-tab active">Tweets</a>
-                            <a href="#" class="profile-tab">Tweets & replies</a>
-                            <a href="#" class="profile-tab">Media</a>
-                            <a href="#" class="profile-tab">Likes</a>
-                        </div>
+                    <div class="profile-tabs">
+                        <a href="#" class="profile-tab active">Tweets</a>
+                        <a href="#" class="profile-tab">Tweets & replies</a>
+                        <a href="#" class="profile-tab">Media</a>
+                        <a href="#" class="profile-tab">Likes</a>
                     </div>
                 </div>
-
-
-                <article class="tweet-card">
-                    <div class="post-header">
-                        <img src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?auto=format&fit=crop&w=200&q=80"
-                            class="avatar" alt="PSD Zone">
-                        <div class="post-user-info">
-                            <div class="name">PSD Zone</div>
-                            <div class="handle">@psd_zone • 2h</div>
-                        </div>
-                    </div>
-                    <p class="post-body">Discover our latest collection of vibrant abstract backgrounds, perfect for
-                        your next design project.</p>
-                    <div class="tweet-media">
-                        <img src="https://i.pinimg.com/736x/c8/3d/fe/c83dfed69dcdb4d5cd385d90c4fbe0e6.jpg"
-                            alt="Abstract pack">
-                    </div>
-                    <div class="tweet-actions">
-                        <div class="item"><i class="fa-regular fa-heart"></i><span>770</span></div>
-                        <div class="item"><i class="fa-regular fa-comment"></i><span>67</span></div>
-                        <div class="item"><i class="fa-solid fa-retweet"></i><span>159</span></div>
-                        <div class="item"><i class="fa-solid fa-share-nodes"></i><span>12</span></div>
-                    </div>
-                </article>
-
-                <article class="tweet-card">
-                    <div class="post-header">
-                        <img src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?auto=format&fit=crop&w=200&q=80"
-                            class="avatar" alt="PSD Zone">
-                        <div class="post-user-info">
-                            <div class="name">PSD Zone</div>
-                            <div class="handle">@psd_zone • 1d</div>
-                        </div>
-                    </div>
-                    <p class="post-body">New free PSD mockups templates available. Present your designs professionally
-                        with these easy-to-use files.</p>
-                    <div class="tweet-media">
-                        <img src="https://i.pinimg.com/1200x/d9/d1/0f/d9d10f36ebaab4293f982bb5b934af1f.jpg"
-                            alt="Mockup pack">
-                    </div>
-                    <div class="tweet-actions">
-                        <div class="item"><i class="fa-regular fa-heart"></i><span>310</span></div>
-                        <div class="item"><i class="fa-regular fa-comment"></i><span>25</span></div>
-                        <div class="item"><i class="fa-solid fa-retweet"></i><span>98</span></div>
-                        <div class="item"><i class="fa-solid fa-share-nodes"></i><span>5</span></div>
-                    </div>
-                </article>
             </div>
-        </main>
 
-<?php require_once 'includes/rightbar.php'; ?>
-<?php require_once 'includes/footer.php'; ?>
+            <div id="user-posts-container">
+                <!-- User posts will be loaded via API -->
+            </div>
+        </div>
+    </main>
 
+    <?php require_once 'includes/rightbar.php'; ?>
+    <?php require_once 'includes/footer.php'; ?>
+</div>
+
+<script>
+const apiKey = "<?= $_SESSION['api_key'] ?? '' ?>";
+const currentUserId = "<?= $_SESSION['user_id'] ?? '' ?>";
+
+function loadProfile() {
+    fetch('api/users.php?id=' + currentUserId, {
+        headers: { 'Authorization': 'Bearer ' + apiKey }
+    })
+    .then(response => response.json())
+    .then(user => {
+        if (user.error) {
+            alert('Error loading profile: ' + user.error);
+            return;
+        }
+        
+        // Update profile
+        document.getElementById('profile-cover').style.backgroundImage = `url('${user.header_pic || 'https://images.unsplash.com/photo-1505839673365-e3971f8d9184?auto=format&fit=crop&w=1400&q=80'}')`;
+        document.getElementById('profile-avatar').src = user.profile_pic || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80';
+        document.getElementById('profile-name').textContent = user.name || user.username;
+        document.getElementById('profile-handle').textContent = '@' + user.username;
+        document.getElementById('profile-bio').textContent = user.bio || 'No bio available.';
+        document.getElementById('profile-location').textContent = user.location || 'Unknown location';
+        
+        const joinedDate = new Date(user.created_at);
+        document.getElementById('profile-joined').textContent = joinedDate.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+    })
+    .catch(error => {
+        console.error('Error loading profile:', error);
+    });
+}
+
+function loadUserPosts() {
+    fetch('api/posts.php', {
+        headers: { 'Authorization': 'Bearer ' + apiKey }
+    })
+    .then(response => response.json())
+    .then(posts => {
+        const container = document.getElementById('user-posts-container');
+        container.innerHTML = '';
+        
+        // Filter posts by current user
+        const userPosts = Array.isArray(posts) ? posts.filter(post => post.user_id == currentUserId) : [];
+        
+        if (userPosts.length === 0) {
+            container.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">No posts yet.</p>';
+            return;
+        }
+        
+        userPosts.forEach(post => {
+            const date = new Date(post.created_at).toLocaleString('id-ID');
+            
+            const postHtml = `
+            <article class="tweet-card">
+                <div class="post-header">
+                    <img src="${post.profile_pic}" class="avatar" alt="Avatar">
+                    <div class="post-user-info">
+                        <div class="name">${post.username}</div>
+                        <div class="handle">@${post.username} • ${date}</div>
+                    </div>
+                </div>
+                <p class="post-body" style="margin-top: 10px;">${post.content}</p>
+                
+                <div class="tweet-actions" style="margin-top: 15px;">
+                    <div class="item"><i class="fa-regular fa-heart"></i><span>0</span></div>
+                    <div class="item"><i class="fa-regular fa-comment"></i><span>${post.comment_count || 0}</span></div>
+                    <div class="item"><i class="fa-solid fa-share-nodes"></i><span>0</span></div>
+                </div>
+            </article>
+            `;
+            container.innerHTML += postHtml;
+        });
+    })
+    .catch(error => {
+        console.error('Error loading posts:', error);
+        document.getElementById('user-posts-container').innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Failed to load posts.</p>';
+    });
+}
+
+// Initial load
+loadProfile();
+loadUserPosts();
+</script>
+</body>
+</html>

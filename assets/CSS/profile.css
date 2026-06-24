@@ -129,7 +129,7 @@
 
 .profile-stats {
     display: flex;
-    gap: 16px;
+    gap: 20px;
     margin: 0 0 16px 0;
     font-size: 14px;
 }
@@ -139,10 +139,22 @@
     color: var(--text-primary);
 }
 
+.profile-stats .count.rank {
+    color: var(--accent-orange);
+}
+
+.profile-stats .count.points {
+    color: var(--accent-green);
+}
+
 .mutual-tab {
     padding-top: 8px;
     text-decoration: none;
     color: inherit;
+}
+
+.mutual-tab.static {
+    cursor: default;
 }
 
 .profile-tabs {

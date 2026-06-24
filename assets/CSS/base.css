@@ -587,6 +587,12 @@ body {
     gap: 12px;
 }
 
+.leaderboard-item .rank-number {
+    font-weight: 700;
+    color: var(--text-tertiary);
+    min-width: 20px;
+}
+
 .leaderboard-item img {
     width: 32px;
     height: 32px;

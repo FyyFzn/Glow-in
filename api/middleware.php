@@ -5,10 +5,30 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
+function getAuthorizationHeader() {
+    if (function_exists('apache_request_headers')) {
+        $headers = apache_request_headers();
+        if (isset($headers['Authorization'])) {
+            return $headers['Authorization'];
+        }
+        if (isset($headers['authorization'])) {
+            return $headers['authorization'];
+        }
+    }
+    // Fallback for non-Apache servers
+    $headers = [];
+    foreach ($_SERVER as $key => $value) {
+        if (substr($key, 0, 5) == 'HTTP_') {
+            $header = str_replace(' ', '-', ucwords(str_replace('_', ' ', strtolower(substr($key, 5)))));
+            $headers[$header] = $value;
+        }
+    }
+    return $headers['Authorization'] ?? $headers['authorization'] ?? '';
+}
+
 function checkApiKey() {
     global $pdo;
-    $headers = apache_request_headers();
-    $auth = $headers["Authorization"] ?? "";
+    $auth = getAuthorizationHeader();
     $api_key = str_replace("Bearer ", "", $auth);
     if (!$api_key) $api_key = $_GET["api_key"] ?? "";
     
@@ -20,7 +40,7 @@ function checkApiKey() {
     
     $stmt = $pdo->prepare("SELECT id, role FROM users WHERE api_key = ?");
     $stmt->execute([$api_key]);
-    $user = $stmt->fetch();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
     
     if (!$user) {
         http_response_code(401);

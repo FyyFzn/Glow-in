@@ -2,48 +2,54 @@
 require_once "middleware.php";
 $user = checkApiKey();
 $method = $_SERVER["REQUEST_METHOD"];
-$id = $_GET["id"] ?? null;
+$user_id = $_GET["id"] ?? null;
 
 try {
     if ($method === "GET") {
-        if ($id) {
-            $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
-            $stmt->execute([$id]);
+        if ($user_id) {
+            // Get single user
+            $stmt = $pdo->prepare("SELECT id, username, name, bio, location, profile_pic, header_pic, created_at FROM users WHERE id = ?");
+            $stmt->execute([$user_id]);
             $data = $stmt->fetch(PDO::FETCH_ASSOC);
         } else {
-            $stmt = $pdo->query("SELECT * FROM users");
+            // Get all users
+            $stmt = $pdo->query("SELECT id, username, name, bio, location, profile_pic, header_pic, created_at FROM users ORDER BY username ASC");
             $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
         echo json_encode($data);
     } 
-    elseif ($method === "POST") {
-        $input = json_decode(file_get_contents("php://input"), true) ?: $_POST;
-        $keys = array_keys($input);
-        $fields = implode(", ", $keys);
-        $placeholders = implode(", ", array_fill(0, count($keys), "?"));
-        $stmt = $pdo->prepare("INSERT INTO users ($fields) VALUES ($placeholders)");
-        $stmt->execute(array_values($input));
-        echo json_encode(["success" => true, "message" => "Data created", "id" => $pdo->lastInsertId()]);
-    }
     elseif ($method === "PUT") {
-        if (!$id) throw new Exception("ID required for PUT");
-        $input = json_decode(file_get_contents("php://input"), true);
-        $sets = [];
-        $values = [];
-        foreach ($input as $key => $val) {
-            $sets[] = "$key = ?";
-            $values[] = $val;
+        // Update user profile
+        if (!$user_id || $user_id != $user['id']) {
+            throw new Exception("Unauthorized");
         }
-        $values[] = $id;
-        $stmt = $pdo->prepare("UPDATE users SET " . implode(", ", $sets) . " WHERE id = ?");
+        
+        $input = json_decode(file_get_contents("php://input"), true);
+        
+        $allowed_fields = ['name', 'bio', 'location', 'profile_pic', 'header_pic'];
+        $update_data = [];
+        
+        foreach ($allowed_fields as $field) {
+            if (isset($input[$field])) {
+                $update_data[$field] = $input[$field];
+            }
+        }
+        
+        if (empty($update_data)) {
+            throw new Exception("No data to update");
+        }
+        
+        $set_clause = implode(", ", array_map(fn($k) => "$k = ?", array_keys($update_data)));
+        $values = array_values($update_data);
+        $values[] = $user_id;
+        
+        $stmt = $pdo->prepare("UPDATE users SET $set_clause WHERE id = ?");
         $stmt->execute($values);
-        echo json_encode(["success" => true, "message" => "Data updated"]);
+        
+        echo json_encode(["success" => true, "message" => "Profile updated successfully"]);
     }
-    elseif ($method === "DELETE") {
-        if (!$id) throw new Exception("ID required for DELETE");
-        $stmt = $pdo->prepare("DELETE FROM users WHERE id = ?");
-        $stmt->execute([$id]);
-        echo json_encode(["success" => true, "message" => "Data deleted"]);
+    else {
+        throw new Exception("Method not allowed");
     }
 } catch (Exception $e) {
     http_response_code(400);

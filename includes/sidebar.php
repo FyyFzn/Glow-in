@@ -1,7 +1,6 @@
 <?php
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
-<!-- Dropdown styles sudah dipindah ke base.css -->
         <aside class="sidebar-left">
             <div class="logo">
                 <i class="fa-solid fa-message logo-icon"></i>
@@ -40,7 +39,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <span>Profile</span>
                 </a>
             </nav>
-            <a href="post.php" class="post-btn" style="text-decoration: none; display: flex; justify-content: center; align-items: center;"><span>Post</span></a>
+            <a href="edit_post.php?type=new" class="post-btn" style="text-decoration: none; display: flex; justify-content: center; align-items: center;"><span>Post</span></a>
 
             <div class="user-profile-mini" style="position: relative;">
                 <img src="<?php echo htmlspecialchars($_SESSION['profile_pic'] ?? 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?auto=format&fit=crop&w=200&q=80'); ?>"
@@ -53,7 +52,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <button class="post-dropdown-btn" onclick="this.nextElementSibling.classList.toggle('show');" style="padding: 0; margin-left: 5px; display:flex; align-items:center;">
                         <i class="fa-solid fa-ellipsis menu-dots"></i>
                     </button>
-                    <div class="post-dropdown-content" style="bottom: 100%; top: auto; right: 0; margin-bottom: 10px; min-width: 120px;">
+                    <div class="post-dropdown-content" style="bottom: 100%; top: auto; right: 0; margin-bottom: 10px; min-width: 150px;">
                         <a href="logout.php" style="color: #ff4757;">
                             <i class="fa-solid fa-right-from-bracket"></i> Logout
                         </a>

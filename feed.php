@@ -71,7 +71,7 @@ if (!isset($_SESSION['user_id'])) {
       </ul>
     </nav>
 
-    <a href="post.php" class="post-button" style="text-decoration: none; display: flex; justify-content: center; align-items: center;">Post</a>
+    <a href="edit_post.php" class="post-button" style="text-decoration: none; display: flex; justify-content: center; align-items: center;">Post</a>
 
     <div class="profile-minibar">
       <div class="profile-info">

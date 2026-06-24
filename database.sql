@@ -118,3 +118,13 @@ CREATE TABLE IF NOT EXISTS notifications (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (actor_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+-- Contoh Data Users
+INSERT INTO users (username, password, name, bio, location, role, points, api_key) VALUES
+('johndoe', '$2y$10$YourHashedPasswordHere1', 'John Doe', 'Hello, I am John!', 'Jakarta', 'postinger', 1500, 'api_johndoe123'),
+('janedoe', '$2y$10$YourHashedPasswordHere2', 'Jane Doe', 'Love to code!', 'Bandung', 'postinger', 2000, 'api_janedoe456'),
+('alexsmith', '$2y$10$YourHashedPasswordHere3', 'Alex Smith', 'Designer & Developer', 'Surabaya', 'spesialis', 1800, 'api_alexsmith789'),
+('sarahwilson', '$2y$10$YourHashedPasswordHere4', 'Sarah Wilson', 'Content Creator', 'Yogyakarta', 'postinger', 2200, 'api_sarahwilson012'),
+('mikejohnson', '$2y$10$YourHashedPasswordHere5', 'Mike Johnson', 'Tech Enthusiast', 'Medan', 'postinger', 1600, 'api_mikejohnson345'),
+('emilydavis', '$2y$10$YourHashedPasswordHere6', 'Emily Davis', 'Photographer', 'Semarang', 'spesialis', 1900, 'api_emilydavis678'),
+('admin', '$2y$10$YourHashedPasswordHere7', 'Admin', 'Administrator', 'Jakarta', 'admin', 0, 'api_admin901');
