@@ -61,25 +61,25 @@ if (!isset($_SESSION['user_id'])) {
             headers: { 'Authorization': 'Bearer ' + apiKey }
         });
         const post = await res.json();
-        // We'll get count from likes API for now
+
         const countRes = await fetch('api/likes.php?post_id=' + postId, {
             headers: { 'Authorization': 'Bearer ' + apiKey }
         });
-        // Wait let's fix posts API to include like count, for now we'll calculate
+
         return 0;
     }
 
     async function toggleLike(postId, iconEl, countEl) {
         event.stopPropagation();
         const isLiked = await checkLikeStatus(postId);
-        
+
         const method = isLiked ? 'DELETE' : 'POST';
         const res = await fetch('api/likes.php?post_id=' + postId, {
             method: method,
             headers: { 'Authorization': 'Bearer ' + apiKey }
         });
         const data = await res.json();
-        
+
         if (data.success) {
             countEl.textContent = data.count;
             if (isLiked) {
@@ -94,8 +94,6 @@ if (!isset($_SESSION['user_id'])) {
         }
     }
 
-
-
     async function checkFollowStatus(userId) {
         if (userId == currentUserId) return false;
         const res = await fetch('api/follows.php?user_id=' + userId, {
@@ -108,14 +106,14 @@ if (!isset($_SESSION['user_id'])) {
     async function toggleFollow(userId, btnEl) {
         event.stopPropagation();
         const isFollowing = await checkFollowStatus(userId);
-        
+
         const method = isFollowing ? 'DELETE' : 'POST';
         const res = await fetch('api/follows.php?user_id=' + userId, {
             method: method,
             headers: { 'Authorization': 'Bearer ' + apiKey }
         });
         const data = await res.json();
-        
+
         if (data.success) {
             if (isFollowing) {
                 btnEl.innerHTML = '<i class="fa-solid fa-user-plus"></i> Follow';
@@ -134,26 +132,26 @@ if (!isset($_SESSION['user_id'])) {
     async function loadPosts() {
         const container = document.getElementById('posts-container');
         container.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Loading...</p>';
-        
+
         try {
             const res = await fetch('api/posts.php', {
                 headers: { 'Authorization': 'Bearer ' + apiKey }
             });
             const posts = await res.json();
-            
+
             container.innerHTML = '';
-            
+
             if (!Array.isArray(posts) || posts.length === 0) {
                 container.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">No posts yet. Be the first to post!</p>';
                 return;
             }
-            
+
             for (const post of posts) {
                 const isOwner = post.user_id == currentUserId;
                 const date = new Date(post.created_at).toLocaleString('id-ID');
                 const isLiked = await checkLikeStatus(post.id);
                 const isFollowing = !isOwner ? await checkFollowStatus(post.user_id) : false;
-                
+
                 let dropdownHtml = '';
                 if (isOwner) {
                     dropdownHtml = `
@@ -165,7 +163,7 @@ if (!isset($_SESSION['user_id'])) {
                         </div>
                     </div>`;
                 }
-                
+
                 let followBtnHtml = '';
                 if (!isOwner) {
                     followBtnHtml = `
@@ -173,9 +171,9 @@ if (!isset($_SESSION['user_id'])) {
                         ${isFollowing ? '<i class="fa-solid fa-user-minus"></i> Unfollow' : '<i class="fa-solid fa-user-plus"></i> Follow'}
                     </button>`;
                 }
-                
+
                 const likeIconClass = isLiked ? 'fa-solid' : 'fa-regular';
-                
+
                 const postHtml = `
                 <article class="tweet-card">
                     <div onclick="window.location.href='detail.php?id=${post.id}';" class="click-post" style="display:block; cursor:pointer;">
@@ -189,7 +187,7 @@ if (!isset($_SESSION['user_id'])) {
                             ${dropdownHtml}
                         </div>
                         <p class="post-body" style="margin-top: 10px;">${post.content}</p>
-                        
+
                         <div class="tweet-actions" style="margin-top: 15px;">
                             <div class="item" onclick="toggleLike(${post.id}, this.querySelector('i'), this.querySelector('span'));">
                                 <i class="${likeIconClass} fa-heart"></i>

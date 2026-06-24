@@ -15,8 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $fields = implode(", ", $keys);
     $placeholders = implode(", ", array_fill(0, count($keys), "?"));
     $values = array_values($_POST);
-    
-    // Jika role spesialis, kita selipkan ID spesialis agar aman (contoh sederhana)
+
     $stmt = $pdo->prepare("INSERT INTO posts ($fields) VALUES ($placeholders)");
     $stmt->execute($values);
     header("Location: posts.php");

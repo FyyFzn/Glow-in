@@ -3,7 +3,6 @@ include "header.php";
 $action = $_GET["action"] ?? "list";
 $edit_data = null;
 
-// Handle Delete
 if ($action === "delete") {
     $id = $_GET["id"];
     $stmt = $pdo->prepare("DELETE FROM categories WHERE id = ?");
@@ -12,7 +11,6 @@ if ($action === "delete") {
     exit;
 }
 
-// Handle Edit (get data for form)
 if ($action === "edit") {
     $id = $_GET["id"];
     $stmt = $pdo->prepare("SELECT * FROM categories WHERE id = ?");
@@ -20,17 +18,16 @@ if ($action === "edit") {
     $edit_data = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-// Handle POST (Create or Update)
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST["id"]) && !empty($_POST["id"])) {
-        // Update existing
+
         $id = $_POST["id"];
         $name = $_POST["name"];
         $description = $_POST["description"];
         $stmt = $pdo->prepare("UPDATE categories SET name = ?, description = ? WHERE id = ?");
         $stmt->execute([$name, $description, $id]);
     } else {
-        // Insert new
+
         $name = $_POST["name"];
         $description = $_POST["description"];
         $stmt = $pdo->prepare("INSERT INTO categories (name, description) VALUES (?, ?)");

@@ -4,7 +4,7 @@ if (!isset($_SESSION["role"]) || $_SESSION["role"] !== "spesialis") {
     die("Akses ditolak. Hanya untuk Spesialis.");
 }
 require_once "../config.php";
-// Ambil ID Spesialis yang sedang login
+
 $spesialis_id = $_SESSION["user_id"];
 ?>
 <!DOCTYPE html>

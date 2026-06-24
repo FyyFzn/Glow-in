@@ -6,15 +6,15 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === 'POST') {
     $action = $_POST['action'] ?? '';
-    
+
     if ($action === 'login') {
         $username = $_POST['username'] ?? '';
         $password = $_POST['password'] ?? '';
-        
+
         $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
         $stmt->execute([$username]);
         $user = $stmt->fetch();
-        
+
         if ($user && password_verify($password, $user['password'])) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
@@ -22,8 +22,7 @@ if ($method === 'POST') {
             $_SESSION['profile_pic'] = $user['profile_pic'] ?: 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?auto=format&fit=crop&w=200&q=80';
             $_SESSION['role'] = $user['role'];
             $_SESSION['api_key'] = $user['api_key'];
-            
-            // Redirect based on role
+
             if ($user['role'] === 'admin') {
                 header("Location: ../admin/index.php");
             } elseif ($user['role'] === 'spesialis') {
@@ -42,13 +41,11 @@ if ($method === 'POST') {
         $password = $_POST['password'] ?? '';
         $confirm_password = $_POST['confirm_password'] ?? '';
 
-        // Check if passwords match
         if ($password !== $confirm_password) {
             echo "<script>alert('Password tidak sama!'); window.location.href='../register.php';</script>";
             exit();
         }
 
-        // Check if username already exists
         $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ?");
         $stmt->execute([$username]);
         if ($stmt->rowCount() > 0) {
@@ -56,12 +53,11 @@ if ($method === 'POST') {
             exit();
         }
 
-        // Hash password and generate API Key
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         $api_key = bin2hex(random_bytes(16));
-        
+
         try {
-            // Insert into database
+
             $stmt = $pdo->prepare("INSERT INTO users (username, password, api_key, role) VALUES (?, ?, ?, 'postinger')");
             if ($stmt->execute([$username, $hashed_password, $api_key])) {
                 header("Location: ../register.php?success=1");
@@ -78,7 +74,7 @@ if ($method === 'POST') {
     }
 } elseif ($method === 'GET') {
     $action = $_GET['action'] ?? '';
-    
+
     if ($action === 'logout') {
         session_destroy();
         header("Location: ../login.php");

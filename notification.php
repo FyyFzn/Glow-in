@@ -66,7 +66,7 @@ if (!isset($_SESSION['user_id'])) {
                 else if(notif.type == 'comment') actionText = "mengomentari postingan Anda.";
                 else if(notif.type == 'follow') actionText = "mulai mengikuti Anda.";
                 else actionText = "berinteraksi dengan Anda.";
-                
+
                 const date = new Date(notif.created_at).toLocaleString('id-ID');
 
                 container.innerHTML += `
@@ -79,8 +79,7 @@ if (!isset($_SESSION['user_id'])) {
                     <span class="timestamp">${date}</span>
                 </li>`;
             });
-            
-            // Mark as read after load
+
             fetch('api/notifications.php', {
                 method: 'PUT',
                 headers: { 'Authorization': 'Bearer ' + apiKey }

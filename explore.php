@@ -71,7 +71,7 @@ if (!isset($_SESSION['user_id'])) {
         .then(data => {
             const container = document.getElementById('posts-container');
             container.innerHTML = '';
-            
+
             data.forEach(post => {
                 const date = new Date(post.created_at).toLocaleString('id-ID');
 
@@ -86,7 +86,7 @@ if (!isset($_SESSION['user_id'])) {
                             </div>
                         </div>
                         <p class="post-body" style="margin-top: 10px;">${post.content}</p>
-                        
+
                         <div class="tweet-actions" style="margin-top: 15px;">
                             <div class="item"><i class="fa-regular fa-heart"></i><span>0</span></div>
                             <div class="item" onclick="event.stopPropagation();"><i class="fa-regular fa-comment"></i><span>${post.comment_count || 0}</span></div>
@@ -101,7 +101,6 @@ if (!isset($_SESSION['user_id'])) {
         .catch(error => console.error('Error fetching posts:', error));
     }
 
-    // Load first time
     loadExplorePosts();
 </script>
 

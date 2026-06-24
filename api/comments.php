@@ -1,66 +1,61 @@
 <?php
 require_once "middleware.php";
+
 $user = checkApiKey();
 $method = $_SERVER["REQUEST_METHOD"];
-$id = $_GET["id"] ?? null;
 
-try {
-    if ($method === "GET") {
-        if ($id) {
-            $stmt = $pdo->prepare("SELECT comments.*, users.username, users.profile_pic FROM comments JOIN users ON comments.user_id = users.id WHERE comments.id = ?");
-            $stmt->execute([$id]);
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        } else {
-            $post_id = $_GET['post_id'] ?? null;
-            if ($post_id) {
-                $stmt = $pdo->prepare("SELECT comments.*, users.username, users.profile_pic FROM comments JOIN users ON comments.user_id = users.id WHERE comments.post_id = ? ORDER BY comments.created_at DESC");
-                $stmt->execute([$post_id]);
-                $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            } else {
-                $stmt = $pdo->query("SELECT comments.*, users.username, users.profile_pic FROM comments JOIN users ON comments.user_id = users.id ORDER BY comments.created_at DESC");
-                $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            }
-        }
-        echo json_encode($data);
-    } 
-    elseif ($method === "POST") {
-        // Handle POST for creating comments
-        $input = json_decode(file_get_contents("php://input"), true);
-        
-        // Validate required fields
-        if (!isset($input['user_id']) || !isset($input['post_id']) || !isset($input['comment_text'])) {
-            throw new Exception("Missing required fields: user_id, post_id, and comment_text are required");
-        }
-        
-        // Insert comment
-        $stmt = $pdo->prepare("INSERT INTO comments (user_id, post_id, comment_text) VALUES (?, ?, ?)");
-        $stmt->execute([$input['user_id'], $input['post_id'], $input['comment_text']]);
-        $commentId = $pdo->lastInsertId();
-        
-        echo json_encode(["success" => true, "message" => "Comment created successfully", "id" => $commentId]);
-    }
-    elseif ($method === "PUT") {
-        if (!$id) throw new Exception("ID required for PUT");
-        $input = json_decode(file_get_contents("php://input"), true);
-        
-        // Validate
-        if (!isset($input['comment_text'])) {
-            throw new Exception("Comment text is required");
-        }
-        
-        $stmt = $pdo->prepare("UPDATE comments SET comment_text = ? WHERE id = ?");
-        $stmt->execute([$input['comment_text'], $id]);
-        
-        echo json_encode(["success" => true, "message" => "Comment updated successfully"]);
-    }
-    elseif ($method === "DELETE") {
-        if (!$id) throw new Exception("ID required for DELETE");
-        $stmt = $pdo->prepare("DELETE FROM comments WHERE id = ?");
+$id = isset($_GET["id"]) ? $_GET["id"] : null;
+$post_id = isset($_GET["post_id"]) ? $_GET["post_id"] : null;
+
+if ($method == "GET") {
+    if ($id != null) {
+        $query = "SELECT comments.*, users.username, users.profile_pic FROM comments JOIN users ON comments.user_id = users.id WHERE comments.id = ?";
+        $stmt = $pdo->prepare($query);
         $stmt->execute([$id]);
-        echo json_encode(["success" => true, "message" => "Comment deleted successfully"]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+    } 
+    else if ($post_id != null) {
+        $query = "SELECT comments.*, users.username, users.profile_pic FROM comments JOIN users ON comments.user_id = users.id WHERE comments.post_id = ? ORDER BY comments.created_at DESC";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$post_id]);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } 
+    else {
+        $query = "SELECT comments.*, users.username, users.profile_pic FROM comments JOIN users ON comments.user_id = users.id ORDER BY comments.created_at DESC";
+        $stmt = $pdo->query($query);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-} catch (Exception $e) {
-    http_response_code(400);
-    echo json_encode(["error" => $e->getMessage()]);
+
+    echo json_encode($data);
+} 
+else if ($method == "POST") {
+    $input = json_decode(file_get_contents("php://input"), true);
+
+    $user_id = $input['user_id'];
+    $post_id = $input['post_id'];
+    $comment_text = $input['comment_text'];
+
+    $query = "INSERT INTO comments (user_id, post_id, comment_text) VALUES (?, ?, ?)";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([$user_id, $post_id, $comment_text]);
+
+    echo json_encode(["success" => true, "message" => "Komentar berhasil ditambahkan"]);
+} 
+else if ($method == "PUT") {
+    $input = json_decode(file_get_contents("php://input"), true);
+    $comment_text = $input['comment_text'];
+
+    $query = "UPDATE comments SET comment_text = ? WHERE id = ?";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([$comment_text, $id]);
+
+    echo json_encode(["success" => true, "message" => "Komentar berhasil diubah"]);
+} 
+else if ($method == "DELETE") {
+    $query = "DELETE FROM comments WHERE id = ?";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([$id]);
+
+    echo json_encode(["success" => true, "message" => "Komentar berhasil dihapus"]);
 }
 ?>

@@ -7,7 +7,6 @@ if (!isset($_SESSION['user_id'])) {
 
 require_once 'config.php';
 
-// Fetch current user data
 $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->execute([$_SESSION['user_id']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);

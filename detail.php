@@ -38,7 +38,7 @@ if (!$post_id) {
             <div class="post-card" id="post-card">
                 <!-- Post akan dimuat via API -->
             </div>
-            
+
             <div class="comments-section">
                 <h3>Comments (<span id="comments-count">0</span>)</h3>
                 <div id="comments-container">
@@ -135,7 +135,7 @@ async function loadPost() {
             ${isFollowing ? '<i class="fa-solid fa-user-minus"></i> Unfollow' : '<i class="fa-solid fa-user-plus"></i> Follow'}
         </button>`;
     }
-    
+
     const likeIconClass = isLiked ? 'fa-solid' : 'fa-regular';
 
     document.getElementById('post-card').innerHTML = `

@@ -94,15 +94,14 @@ function loadProfile() {
             alert('Error loading profile: ' + user.error);
             return;
         }
-        
-        // Update profile
+
         document.getElementById('profile-cover').style.backgroundImage = `url('${user.header_pic || 'https://images.unsplash.com/photo-1505839673365-e3971f8d9184?auto=format&fit=crop&w=1400&q=80'}')`;
         document.getElementById('profile-avatar').src = user.profile_pic || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80';
         document.getElementById('profile-name').textContent = user.name || user.username;
         document.getElementById('profile-handle').textContent = '@' + user.username;
         document.getElementById('profile-bio').textContent = user.bio || 'No bio available.';
         document.getElementById('profile-location').textContent = user.location || 'Unknown location';
-        
+
         const joinedDate = new Date(user.created_at);
         document.getElementById('profile-joined').textContent = joinedDate.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
     })
@@ -119,18 +118,17 @@ function loadUserPosts() {
     .then(posts => {
         const container = document.getElementById('user-posts-container');
         container.innerHTML = '';
-        
-        // Filter posts by current user
+
         const userPosts = Array.isArray(posts) ? posts.filter(post => post.user_id == currentUserId) : [];
-        
+
         if (userPosts.length === 0) {
             container.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">No posts yet.</p>';
             return;
         }
-        
+
         userPosts.forEach(post => {
             const date = new Date(post.created_at).toLocaleString('id-ID');
-            
+
             const postHtml = `
             <article class="tweet-card">
                 <div class="post-header">
@@ -141,7 +139,7 @@ function loadUserPosts() {
                     </div>
                 </div>
                 <p class="post-body" style="margin-top: 10px;">${post.content}</p>
-                
+
                 <div class="tweet-actions" style="margin-top: 15px;">
                     <div class="item"><i class="fa-regular fa-heart"></i><span>0</span></div>
                     <div class="item"><i class="fa-regular fa-comment"></i><span>${post.comment_count || 0}</span></div>
@@ -158,7 +156,6 @@ function loadUserPosts() {
     });
 }
 
-// Initial load
 loadProfile();
 loadUserPosts();
 </script>

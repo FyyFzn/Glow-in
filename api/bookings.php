@@ -1,52 +1,52 @@
 <?php
 require_once "middleware.php";
+
 $user = checkApiKey();
 $method = $_SERVER["REQUEST_METHOD"];
-$id = $_GET["id"] ?? null;
+$id = isset($_GET["id"]) ? $_GET["id"] : null;
 
-try {
-    if ($method === "GET") {
-        if ($id) {
-            $stmt = $pdo->prepare("SELECT * FROM bookings WHERE id = ?");
-            $stmt->execute([$id]);
-            $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        } else {
-            $stmt = $pdo->query("SELECT * FROM bookings");
-            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
-        echo json_encode($data);
-    } 
-    elseif ($method === "POST") {
-        $input = json_decode(file_get_contents("php://input"), true) ?: $_POST;
-        $keys = array_keys($input);
-        $fields = implode(", ", $keys);
-        $placeholders = implode(", ", array_fill(0, count($keys), "?"));
-        $stmt = $pdo->prepare("INSERT INTO bookings ($fields) VALUES ($placeholders)");
-        $stmt->execute(array_values($input));
-        echo json_encode(["success" => true, "message" => "Data created", "id" => $pdo->lastInsertId()]);
-    }
-    elseif ($method === "PUT") {
-        if (!$id) throw new Exception("ID required for PUT");
-        $input = json_decode(file_get_contents("php://input"), true);
-        $sets = [];
-        $values = [];
-        foreach ($input as $key => $val) {
-            $sets[] = "$key = ?";
-            $values[] = $val;
-        }
-        $values[] = $id;
-        $stmt = $pdo->prepare("UPDATE bookings SET " . implode(", ", $sets) . " WHERE id = ?");
-        $stmt->execute($values);
-        echo json_encode(["success" => true, "message" => "Data updated"]);
-    }
-    elseif ($method === "DELETE") {
-        if (!$id) throw new Exception("ID required for DELETE");
-        $stmt = $pdo->prepare("DELETE FROM bookings WHERE id = ?");
+if ($method == "GET") {
+    if ($id != null) {
+        $stmt = $pdo->prepare("SELECT * FROM bookings WHERE id = ?");
         $stmt->execute([$id]);
-        echo json_encode(["success" => true, "message" => "Data deleted"]);
+        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+    } else {
+        $stmt = $pdo->query("SELECT * FROM bookings ORDER BY created_at DESC");
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-} catch (Exception $e) {
-    http_response_code(400);
-    echo json_encode(["error" => $e->getMessage()]);
+
+    echo json_encode($data);
+} 
+else if ($method == "POST") {
+    $input = json_decode(file_get_contents("php://input"), true);
+
+    $postinger_id = $input['postinger_id'];
+    $schedule_id = $input['schedule_id'];
+    $status = isset($input['status']) ? $input['status'] : 'menunggu';
+    $notes = isset($input['notes']) ? $input['notes'] : '';
+
+    $query = "INSERT INTO bookings (postinger_id, schedule_id, status, notes) VALUES (?, ?, ?, ?)";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([$postinger_id, $schedule_id, $status, $notes]);
+
+    echo json_encode(["success" => true, "message" => "Pesanan konsultasi berhasil dibuat"]);
+} 
+else if ($method == "PUT") {
+    $input = json_decode(file_get_contents("php://input"), true);
+
+    $status = $input['status'];
+    $notes = isset($input['notes']) ? $input['notes'] : '';
+
+    $query = "UPDATE bookings SET status = ?, notes = ? WHERE id = ?";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([$status, $notes, $id]);
+
+    echo json_encode(["success" => true, "message" => "Status pesanan berhasil diubah"]);
+} 
+else if ($method == "DELETE") {
+    $stmt = $pdo->prepare("DELETE FROM bookings WHERE id = ?");
+    $stmt->execute([$id]);
+
+    echo json_encode(["success" => true, "message" => "Pesanan berhasil dihapus/dibatalkan"]);
 }
 ?>

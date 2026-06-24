@@ -5,7 +5,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 try {
     if ($method === 'GET') {
-        // Dummy notifications
+
         $dummyNotifs = [
             [
                 'id' => 1,

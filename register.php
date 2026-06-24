@@ -34,11 +34,11 @@ $success = isset($_GET['success']) ? $_GET['success'] : 0;
 
             <form action="api/auth.php" method="POST" id="registerForm">
                 <input type="hidden" name="action" value="register">
-                
+
                 <div class="input-group">
                     <input type="text" name="username" placeholder="username" required>
                 </div>
-                
+
                 <div class="input-group">
                     <input type="email" name="email" placeholder="email" required>
                 </div>
@@ -55,7 +55,6 @@ $success = isset($_GET['success']) ? $_GET['success'] : 0;
                 <button type="submit" class="btn btn-submit">Create Account</button>
             </form>
 
-
         <?php else: ?>
             <div class="success-message">
                 <i class="fas fa-check-circle"></i> Akun berhasil dibuat!
@@ -68,7 +67,7 @@ $success = isset($_GET['success']) ? $_GET['success'] : 0;
         document.getElementById('registerForm')?.addEventListener('submit', function(e) {
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm_password').value;
-            
+
             if (password !== confirmPassword) {
                 e.preventDefault();
                 alert('Password tidak sama!');

@@ -104,7 +104,7 @@ if (!isset($_SESSION['user_id'])) {
             </div>
           </div>
         </article>
-        
+
         <article class="post">
           <img src="https://images.unsplash.com/photo-1763046287602-7f878927101f?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="user" class="post-avatar">
           <div>
@@ -117,7 +117,6 @@ if (!isset($_SESSION['user_id'])) {
             </div>
           </div>
         </article>
-        
 
         <a href="detail.php" class="post-link">
         <article class="post">
@@ -150,7 +149,7 @@ if (!isset($_SESSION['user_id'])) {
 
       </section>
   </main>
-  
+
   <aside class="right-sidebar">
       <div class="trending-search">
         <i class="fa-solid fa-magnifying-glass"></i>

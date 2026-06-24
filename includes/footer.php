@@ -3,7 +3,7 @@
     <label for="menu-toggle" id="overlay"></label>
 
     <script>
-        // Menutup semua dropdown jika user mengklik di luar area dropdown
+
         window.onclick = function(event) {
             if (!event.target.closest('.post-dropdown-btn')) {
                 var dropdowns = document.getElementsByClassName("post-dropdown-content");

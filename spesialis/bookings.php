@@ -3,17 +3,15 @@ include "header.php";
 $action = $_GET["action"] ?? "list";
 $edit_data = null;
 
-// Handle Delete
 if ($action === "delete") {
     $id = $_GET["id"];
-    // Pastikan booking yang dihapus adalah milik jadwal spesialis ini
+
     $stmt = $pdo->prepare("DELETE b FROM bookings b JOIN schedules s ON b.schedule_id = s.id WHERE b.id = ? AND s.spesialis_id = ?");
     $stmt->execute([$id, $spesialis_id]);
     header("Location: bookings.php");
     exit;
 }
 
-// Handle Edit (get data for form)
 if ($action === "edit") {
     $id = $_GET["id"];
     $stmt = $pdo->prepare("SELECT b.* FROM bookings b JOIN schedules s ON b.schedule_id = s.id WHERE b.id = ? AND s.spesialis_id = ?");
@@ -21,24 +19,22 @@ if ($action === "edit") {
     $edit_data = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-// Handle POST (Create or Update)
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $postinger_id = $_POST["postinger_id"];
     $schedule_id = $_POST["schedule_id"];
     $status = $_POST["status"];
     $notes = $_POST["notes"];
 
-    // Validasi apakah schedule_id ini benar-benar milik spesialis yang sedang login
     $check_schedule = $pdo->prepare("SELECT id FROM schedules WHERE id = ? AND spesialis_id = ?");
     $check_schedule->execute([$schedule_id, $spesialis_id]);
     if ($check_schedule->rowCount() > 0) {
         if (isset($_POST["id"]) && !empty($_POST["id"])) {
-            // Update
+
             $id = $_POST["id"];
             $stmt = $pdo->prepare("UPDATE bookings SET postinger_id = ?, schedule_id = ?, status = ?, notes = ? WHERE id = ?");
             $stmt->execute([$postinger_id, $schedule_id, $status, $notes, $id]);
         } else {
-            // Create
+
             $stmt = $pdo->prepare("INSERT INTO bookings (postinger_id, schedule_id, status, notes) VALUES (?, ?, ?, ?)");
             $stmt->execute([$postinger_id, $schedule_id, $status, $notes]);
         }
@@ -62,7 +58,6 @@ $notes_val = $edit_data ? htmlspecialchars($edit_data["notes"]) : "";
 
 echo "<div class='form-group'><label>ID User (Postinger)</label><input type='number' name='postinger_id' value='$postinger_val' required></div>";
 
-// Dropdown untuk memilih jadwal milik spesialis ini
 echo "<div class='form-group'><label>Pilih Jadwal</label>";
 echo "<select name='schedule_id' required>";
 $schedules_stmt = $pdo->prepare("SELECT id, available_date, start_time FROM schedules WHERE spesialis_id = ? ORDER BY available_date DESC");

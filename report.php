@@ -8,9 +8,6 @@
 </head>
 <body>
 
-
-
-
 <div class="overlay"></div>
 
 <div class="modal">

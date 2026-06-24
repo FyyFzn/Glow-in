@@ -75,7 +75,7 @@ $textareaValue = $post ? htmlspecialchars($post['content']) : '';
     </header>
 
     <div class="container">
-      
+
       <?php if ($is_edit && $post_id && !$post): ?>
           <p>Post not found or unauthorized.</p>
       <?php else: ?>
@@ -124,14 +124,14 @@ const isNew = <?= $is_new ? 'true' : 'false' ?>;
 const form = document.getElementById('post-form');
 form.addEventListener('submit', function(e) {
     e.preventDefault();
-    
+
     const content = document.getElementById('post-content').value.trim();
-    
+
     if (!content) {
         alert('Please enter some content!');
         return;
     }
-    
+
     if (isComment) {
         fetch('api/comments.php', {
             method: 'POST',
@@ -161,7 +161,7 @@ form.addEventListener('submit', function(e) {
     }
 
     if (isEdit) {
-        // Update existing post
+
         fetch('api/posts.php?id=' + postId, {
             method: 'PUT',
             headers: {
@@ -187,7 +187,6 @@ form.addEventListener('submit', function(e) {
         return;
     }
 
-    // Create new post
     fetch('api/posts.php', {
         method: 'POST',
         headers: {

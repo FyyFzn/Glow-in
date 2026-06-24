@@ -15,7 +15,7 @@ function getAuthorizationHeader() {
             return $headers['authorization'];
         }
     }
-    // Fallback for non-Apache servers
+
     $headers = [];
     foreach ($_SERVER as $key => $value) {
         if (substr($key, 0, 5) == 'HTTP_') {
@@ -31,17 +31,17 @@ function checkApiKey() {
     $auth = getAuthorizationHeader();
     $api_key = str_replace("Bearer ", "", $auth);
     if (!$api_key) $api_key = $_GET["api_key"] ?? "";
-    
+
     if (empty($api_key)) {
         http_response_code(401);
         echo json_encode(["error" => "API Key is required"]);
         exit;
     }
-    
+
     $stmt = $pdo->prepare("SELECT id, role FROM users WHERE api_key = ?");
     $stmt->execute([$api_key]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
     if (!$user) {
         http_response_code(401);
         echo json_encode(["error" => "Invalid API Key"]);

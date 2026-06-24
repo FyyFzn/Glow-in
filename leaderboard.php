@@ -2,18 +2,15 @@
 session_start();
 require_once 'config.php';
 
-// Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
 }
 
-// Fetch current user data
 $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->execute([$_SESSION['user_id']]);
 $currentUser = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Calculate current user's rank
 $rankStmt = $pdo->prepare("
     SELECT COUNT(*) + 1 AS user_rank 
     FROM users 
@@ -23,7 +20,6 @@ $rankStmt->execute([$currentUser['points'], $currentUser['points'], $currentUser
 $rankResult = $rankStmt->fetch(PDO::FETCH_ASSOC);
 $currentUserRank = $rankResult['user_rank'];
 
-// Prepare display data
 $displayName = !empty($currentUser['name']) ? $currentUser['name'] : $currentUser['username'];
 if (!empty($currentUser['profile_pic'])) {
     $profilePic = $currentUser['profile_pic'];
@@ -187,9 +183,9 @@ if (!empty($currentUser['profile_pic'])) {
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const apiLeaderboardKey = "<?= $_SESSION['api_key'] ?? '' ?>";
-    
+
     console.log('Leaderboard API Key:', apiLeaderboardKey);
-    
+
     fetch('api/leaderboard.php?limit=10', {
         headers: { 'Authorization': 'Bearer ' + apiLeaderboardKey }
     })
@@ -206,13 +202,12 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .then(data => {
         console.log('Leaderboard data:', data);
-        
+
         if (data.error || !Array.isArray(data) || data.length === 0) {
             console.warn('Leaderboard API error or no data, keeping static');
             return;
         }
-        
-        // Update table with all users
+
         const tbody = document.getElementById('leaderboard-table-body');
         tbody.innerHTML = '';
         data.forEach((user, index) => {
@@ -231,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .catch(err => {
         console.error('Leaderboard error fetching leaderboard:', err);
-        // Keep static data on error
+
     });
 });
 </script>

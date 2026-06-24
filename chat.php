@@ -121,14 +121,13 @@ if (!isset($_SESSION['user_id'])) {
         activeChatUser = userId;
         activeChatName = userName;
         activeChatAvatar = userAvatar;
-        
+
         document.getElementById('chat-header-container').style.display = 'flex';
         document.getElementById('message-input-area').style.display = 'flex';
         document.getElementById('chat-header-name').innerText = userName;
         document.getElementById('chat-header-avatar').style.backgroundImage = `url('${userAvatar}')`;
         document.getElementById('chat-header-avatar').style.backgroundSize = 'cover';
 
-        // Update selected chat
         document.querySelectorAll('.chat-item').forEach(item => {
             item.classList.remove('selected');
         });
@@ -149,15 +148,14 @@ if (!isset($_SESSION['user_id'])) {
 
         const conversationArea = document.getElementById('conversation-area');
         const time = new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
-        
+
         conversationArea.innerHTML += `
         <div class="message outgoing">
             <p>${text}</p>
             <div class="time">${time}</div>
         </div>`;
         conversationArea.scrollTop = conversationArea.scrollHeight;
-        
-        // Simulate reply
+
         setTimeout(() => {
             const replies = [
                 "That's great! 👍",
@@ -168,7 +166,7 @@ if (!isset($_SESSION['user_id'])) {
             ];
             const randomReply = replies[Math.floor(Math.random() * replies.length)];
             const replyTime = new Date().toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
-            
+
             conversationArea.innerHTML += `
             <div class="message incoming">
                 <div class="avatar-message" style="background-image: url('${activeChatAvatar}'); background-size: cover;"></div>

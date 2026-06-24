@@ -26,18 +26,18 @@ $aiProfilePics = [
 ];
 
 foreach ($dummyUsers as $index => $userData) {
-    // Check if user already exists
+
     $check = $pdo->prepare("SELECT id FROM users WHERE username = ?");
     $check->execute([$userData['username']]);
     if ($check->rowCount() > 0) {
         echo "User {$userData['username']} already exists, skipping...\n";
         continue;
     }
-    
+
     $api_key = bin2hex(random_bytes(16));
     $hashed_password = password_hash('password123', PASSWORD_DEFAULT);
     $profile_pic = $aiProfilePics[$index % count($aiProfilePics)];
-    
+
     try {
         $stmt = $pdo->prepare("INSERT INTO users (username, name, password, api_key, role, points, profile_pic) VALUES (?, ?, ?, ?, 'postinger', ?, ?)");
         $stmt->execute([

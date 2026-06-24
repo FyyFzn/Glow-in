@@ -45,9 +45,9 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const apiLeaderboardKey = "<?= $_SESSION['api_key'] ?? '' ?>";
-    
+
     console.log('Rightbar API Key:', apiLeaderboardKey);
-    
+
     fetch('../api/leaderboard.php?limit=5', {
         headers: { 'Authorization': 'Bearer ' + apiLeaderboardKey }
     })
@@ -65,12 +65,12 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(data => {
         console.log('Rightbar data:', data);
         const list = document.getElementById('rightbar-leaderboard');
-        
+
         if (data.error || !Array.isArray(data) || data.length === 0) {
             console.warn('Rightbar API error or no data, keeping static');
             return;
         }
-        
+
         list.innerHTML = '';
         data.forEach((user, index) => {
             const displayName = user.name ? user.name : user.username;
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
     })
     .catch(err => {
         console.error('Rightbar error fetching leaderboard:', err);
-        // Keep static data on error
+
     });
 });
 </script>
