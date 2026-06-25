@@ -85,9 +85,14 @@ $textareaPlaceholder = $is_comment ? 'Write your comment...' : "What's on your m
         <textarea id="post-content" name="content" class="post-textarea" placeholder="<?= htmlspecialchars($textareaPlaceholder) ?>" required></textarea>
 
         <?php if (!$is_comment): ?>
-        <div class="upload-box">
-          <i class="fa-regular fa-image"></i>
-          <span>Upload image</span>
+        <input type="hidden" id="post-image" value="">
+        <div class="upload-box clickable-card" onclick="openImagePicker('post-image', 'onPostImagePicked')" style="cursor: pointer; border: 2px dashed #E5E7EB; padding: 16px; border-radius: 12px; text-align: center; margin: 12px 0;">
+          <i class="fa-regular fa-image" style="color: #FF6B00; font-size: 20px;"></i>
+          <span style="font-weight: 600; color: #374151; margin-left: 8px;">Pilih foto dari folder IMG / URL</span>
+        </div>
+        <div id="post-image-preview" class="tweet-media d-none" style="position: relative; margin-bottom: 16px;">
+          <img id="preview-img-tag" src="" style="width: 100%; max-height: 300px; object-fit: cover; border-radius: 16px;" alt="Preview">
+          <button type="button" onclick="removePostImage()" style="position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 16px;">&times;</button>
         </div>
         <?php endif; ?>
 
@@ -126,9 +131,31 @@ if(isEdit && postId) {
                     const lbl = document.getElementById('visibility-label');
                     if(lbl) lbl.textContent = post.is_anonymous == 1 ? '🕵️ Anonim' : '🌐 Public';
                 }
+                if(post.image) {
+                    const inp = document.getElementById('post-image');
+                    if(inp) inp.value = post.image;
+                    onPostImagePicked(post.image);
+                }
             }
         });
     });
+}
+
+function onPostImagePicked(url) {
+    if(!url) return;
+    const prev = document.getElementById('post-image-preview');
+    const tag = document.getElementById('preview-img-tag');
+    if(prev && tag) {
+        tag.src = url;
+        prev.classList.remove('d-none');
+    }
+}
+
+function removePostImage() {
+    const inp = document.getElementById('post-image');
+    if(inp) inp.value = '';
+    const prev = document.getElementById('post-image-preview');
+    if(prev) prev.classList.add('d-none');
 }
 
 function selectVisibility(val, text) {
@@ -180,6 +207,8 @@ form.addEventListener('submit', function(e) {
         return;
     }
 
+    const imageUrl = document.getElementById('post-image') ? document.getElementById('post-image').value.trim() : null;
+
     if (isEdit) {
         fetch('../controllers/postController.php?id=' + postId, {
             method: 'PUT',
@@ -189,6 +218,7 @@ form.addEventListener('submit', function(e) {
             },
             body: JSON.stringify({
                 content: content,
+                image: imageUrl,
                 is_anonymous: isAnonymous
             })
         })
@@ -216,6 +246,7 @@ form.addEventListener('submit', function(e) {
         body: JSON.stringify({
             user_id: userId,
             content: content,
+            image: imageUrl,
             is_anonymous: isAnonymous
         })
     })

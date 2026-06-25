@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
     specialty_id INT DEFAULT NULL,
     points INT DEFAULT 0,
     api_key VARCHAR(255) DEFAULT NULL UNIQUE,
+    is_anonymous BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -123,8 +124,8 @@ CREATE TABLE IF NOT EXISTS notifications (
 
 -- Data Dummy Users untuk Role
 INSERT INTO users (username, password, name, bio, location, role, points, api_key) VALUES
-('postinger', '$2y$10$6Y5nwjSq.20inDd.k9fY1.21oUBYEloMqaDTQ0uu2N.SpxzcxZRMe', 'Postinger', 'Akun Postinger', 'Jakarta', 'postinger', 1000, 'api_postinger_key'),
-('spesialis', '$2y$10$6Y5nwjSq.20inDd.k9fY1.21oUBYEloMqaDTQ0uu2N.SpxzcxZRMe', 'Spesialis', 'Akun Spesialis', 'Bandung', 'spesialis', 1000, 'api_spesialis_key'),
+('postinger', '$2y$10$6Y5nwjSq.20inDd.k9fY1.21oUBYEloMqaDTQ0uu2N.SpxzcxZRMe', 'Postinger', 'Akun Postinger', 'Jakarta', 'postinger', 0, 'api_postinger_key'),
+('spesialis', '$2y$10$6Y5nwjSq.20inDd.k9fY1.21oUBYEloMqaDTQ0uu2N.SpxzcxZRMe', 'Spesialis', 'Akun Spesialis', 'Bandung', 'spesialis', 0, 'api_spesialis_key'),
 ('admin', '$2y$10$6Y5nwjSq.20inDd.k9fY1.21oUBYEloMqaDTQ0uu2N.SpxzcxZRMe', 'Admin', 'Akun Admin', 'Surabaya', 'admin', 0, 'api_admin_key');
 
 -- 11. Likes

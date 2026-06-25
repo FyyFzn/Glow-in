@@ -174,10 +174,6 @@ async function loadCommentsDetail() {
     const container = document.getElementById('detail-comments-container');
     document.getElementById('detail-comment-count').textContent = Array.isArray(comments) ? comments.length : 0;
 
-    // if (!Array.isArray(comments) || comments.length === 0) {
-    //     container.innerHTML = '<p class="empty-state">Belum ada komentar. Berikan dukungan positifmu!</p>';
-    //     return;
-    // }
 
     container.innerHTML = '';
     comments.forEach(c => {
