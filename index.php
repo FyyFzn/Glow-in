@@ -74,7 +74,7 @@
     <section class="cta">
         <div class="cta-content">
             <h2>Bergabunglah dengan lebih dari 6.000.000 orang di seluruh dunia yang memutuskan untuk mendapatkan bantuan dan merasa bahagia dengan Glow-in.</h2>
-            <a href="pages/register.php" class="btn-primary" style="text-decoration:none;">Ayo Mulai</a>
+            <a href="pages/register.php" class="btn-primary">Ayo Mulai</a>
         </div>
         <img src="/assets/IMG/bareng.jpg"
             alt="Foto Bareng" />

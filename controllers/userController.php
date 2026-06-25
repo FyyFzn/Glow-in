@@ -47,6 +47,17 @@ else if ($method == "PUT") {
     $stmt = $pdo->prepare("UPDATE users SET $set_clause WHERE id = ?");
     $stmt->execute($values);
 
+    // Update PHP Session agar UI langsung tersinkronisasi
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (isset($update_data['name']) && $update_data['name'] !== '') {
+        $_SESSION['name'] = $update_data['name'];
+    }
+    if (isset($update_data['profile_pic']) && $update_data['profile_pic'] !== '') {
+        $_SESSION['profile_pic'] = $update_data['profile_pic'];
+    }
+
     echo json_encode(["success" => true, "message" => "Profil berhasil diperbarui"]);
 } 
 else {

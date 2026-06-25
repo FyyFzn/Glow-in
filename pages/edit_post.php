@@ -38,7 +38,7 @@ $textareaPlaceholder = $is_comment ? 'Write your comment...' : "What's on your m
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Glow-in | <?= htmlspecialchars($formTitle) ?></title>
-  <link rel="stylesheet" href="../assets/CSS/base.css?v=8" />
+  <link rel="stylesheet" href="../assets/CSS/base.css?v=105" />
   <link rel="stylesheet" href="../assets/CSS/home.css" />
   <link rel="stylesheet" href="../assets/CSS/post.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
@@ -66,10 +66,16 @@ $textareaPlaceholder = $is_comment ? 'Write your comment...' : "What's on your m
             <div class="post-user-row">
               <span class="name"><?= htmlspecialchars($_SESSION['name'] ?? $_SESSION['username'] ?? 'User') ?></span>
               <?php if (!$is_comment): ?>
-              <select id="post-visibility" class="post-visibility-select">
-                <option value="0">🌐 Public</option>
-                <option value="1">🕵️ Anonim</option>
-              </select>
+              <div class="post-dropdown ml-14" onclick="event.stopPropagation();">
+                <button type="button" id="visibility-dropdown-btn" class="post-visibility-btn" onclick="this.nextElementSibling.classList.toggle('show');">
+                  <span id="visibility-label">🌐 Public</span> <i class="fa-solid fa-chevron-down text-xs"></i>
+                </button>
+                <div class="post-dropdown-content dropdown-left-menu">
+                  <button type="button" onclick="selectVisibility(0, '🌐 Public')">🌐 Public</button>
+                  <button type="button" onclick="selectVisibility(1, '🕵️ Anonim')">🕵️ Anonim</button>
+                </div>
+              </div>
+              <input type="hidden" id="post-visibility" value="0">
               <?php endif; ?>
             </div>
             <div class="handle">@<?= htmlspecialchars($_SESSION['username'] ?? 'user') ?></div>
@@ -86,8 +92,8 @@ $textareaPlaceholder = $is_comment ? 'Write your comment...' : "What's on your m
         <?php endif; ?>
 
         <div class="post-actions">
-          <a href="<?= $is_comment ? 'detail.php?id=' . urlencode($comment_post_id) : 'home.php' ?>" class="btn cancel" style="text-decoration:none; text-align:center; display:inline-block; padding:8px 16px;">Cancel</a>
-          <button type="submit" class="btn submit"><?= htmlspecialchars($buttonLabel) ?></button>
+          <a href="<?= $is_comment ? 'detail.php?id=' . urlencode($comment_post_id) : 'home.php' ?>" class="btn cancel">Cancel</a>
+          <button type="submit" class="btn btn-primary submit"><?= htmlspecialchars($buttonLabel) ?></button>
         </div>
       </form>
     </div>
@@ -117,10 +123,20 @@ if(isEdit && postId) {
                 const vis = document.getElementById('post-visibility');
                 if(vis && post.is_anonymous !== undefined) {
                     vis.value = post.is_anonymous == 1 ? "1" : "0";
+                    const lbl = document.getElementById('visibility-label');
+                    if(lbl) lbl.textContent = post.is_anonymous == 1 ? '🕵️ Anonim' : '🌐 Public';
                 }
             }
         });
     });
+}
+
+function selectVisibility(val, text) {
+    const hiddenEl = document.getElementById('post-visibility');
+    const labelEl = document.getElementById('visibility-label');
+    if (hiddenEl) hiddenEl.value = val;
+    if (labelEl) labelEl.textContent = text;
+    document.querySelectorAll('.post-dropdown-content.show').forEach(el => el.classList.remove('show'));
 }
 
 const form = document.getElementById('post-form');

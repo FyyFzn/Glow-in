@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Glow-in Login</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../assets/CSS/base.css?v=101">
   <link rel="stylesheet" href="../assets/CSS/login.css">
 </head>
 
@@ -22,19 +23,19 @@
 
     <div class="divider">Or</div>
 
-    <p id="login-error" style="color: #EF4444; font-size: 14px; margin-bottom: 12px; display: none;"></p>
+    <p id="login-error" class="error-state mb-16 d-none"></p>
 
     <form id="loginForm">
       <div class="input-group">
         <i class="fa-solid fa-user"></i>
         <input type="text" id="username" placeholder="Username" required />
       </div>
-      <div class="input-group" style="margin-top: 15px;">
+      <div class="input-group mt-16">
         <i class="fa-solid fa-lock"></i>
         <input type="password" id="password" placeholder="Password" required />
       </div>
 
-      <button class="btn btn-submit" type="submit" style="margin-top: 15px;">Login</button>
+      <button class="btn btn-primary mt-16" type="submit">Login</button>
       <a href="#" class="forgot">Forgot password?</a>
     </form>
 
@@ -47,7 +48,7 @@
 document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const errEl = document.getElementById('login-error');
-    errEl.style.display = 'none';
+    errEl.classList.add('d-none');
 
     fetch('../controllers/authController.php', {
         method: 'POST',
@@ -64,12 +65,12 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
             window.location.href = data.redirect;
         } else {
             errEl.textContent = data.error || 'Gagal login.';
-            errEl.style.display = 'block';
+            errEl.classList.remove('d-none');
         }
     })
     .catch(err => {
         errEl.textContent = 'Terjadi kesalahan jaringan.';
-        errEl.style.display = 'block';
+        errEl.classList.remove('d-none');
     });
 });
 </script>

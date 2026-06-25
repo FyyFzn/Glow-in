@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Edit Profile - Glow-in</title>
-  <link rel="stylesheet" href="../assets/CSS/base.css?v=8" />
+  <link rel="stylesheet" href="../assets/CSS/base.css?v=105" />
   <link rel="stylesheet" href="../assets/CSS/profile.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -33,8 +33,8 @@ if (!isset($_SESSION['user_id'])) {
 
     <div class="container">
       <form id="edit-profile-form" class="post-card">
-        <p id="profile-loading" style="color: #9CA3AF; margin-bottom: 16px;">Memuat data profil via REST API...</p>
-        <div id="profile-form-body" style="display: none;">
+        <p id="profile-loading" class="loading-state mb-16">Memuat data profil via REST API...</p>
+        <div id="profile-form-body" class="d-none">
           <div class="form-group">
               <label>Name</label>
               <input type="text" id="profile-name" placeholder="Your display name">
@@ -60,9 +60,9 @@ if (!isset($_SESSION['user_id'])) {
               <input type="url" id="profile-header" placeholder="https://example.com/cover.jpg">
           </div>
 
-          <div class="post-actions" style="margin-top: 20px;">
-            <a href="profile.php" class="btn cancel" style="text-decoration:none; text-align:center; display:inline-block; padding:8px 16px;">Cancel</a>
-            <button type="button" class="btn submit" onclick="saveProfile()">Save Profile</button>
+          <div class="post-actions mt-20">
+            <a href="profile.php" class="btn cancel">Cancel</a>
+            <button type="button" class="btn btn-primary submit" onclick="saveProfile()">Save Profile</button>
           </div>
         </div>
       </form>
@@ -77,8 +77,8 @@ if (!isset($_SESSION['user_id'])) {
         })
         .then(res => res.json())
         .then(user => {
-            document.getElementById('profile-loading').style.display = 'none';
-            document.getElementById('profile-form-body').style.display = 'block';
+            document.getElementById('profile-loading').classList.add('d-none');
+            document.getElementById('profile-form-body').classList.remove('d-none');
 
             if(user && !user.error) {
                 document.getElementById('profile-name').value = user.name || '';
@@ -94,12 +94,25 @@ if (!isset($_SESSION['user_id'])) {
     });
 
     function saveProfile() {
+        const formEl = document.getElementById('edit-profile-form');
+        if (formEl && !formEl.checkValidity()) {
+            formEl.reportValidity();
+            return;
+        }
+
+        const btnEl = document.querySelector('.post-actions .submit');
+        const origText = btnEl ? btnEl.textContent : 'Save Profile';
+        if (btnEl) {
+            btnEl.disabled = true;
+            btnEl.textContent = 'Saving...';
+        }
+
         const payload = {
-            name: document.getElementById('profile-name').value,
-            bio: document.getElementById('profile-bio').value,
-            location: document.getElementById('profile-location').value,
-            profile_pic: document.getElementById('profile-pic').value,
-            header_pic: document.getElementById('profile-header').value
+            name: document.getElementById('profile-name').value.trim(),
+            bio: document.getElementById('profile-bio').value.trim(),
+            location: document.getElementById('profile-location').value.trim(),
+            profile_pic: document.getElementById('profile-pic').value.trim(),
+            header_pic: document.getElementById('profile-header').value.trim()
         };
 
         fetch('../controllers/userController.php?id=' + currentUserId, {
@@ -112,6 +125,10 @@ if (!isset($_SESSION['user_id'])) {
         })
         .then(res => res.json())
         .then(data => {
+            if (btnEl) {
+                btnEl.disabled = false;
+                btnEl.textContent = origText;
+            }
             if(data.success) {
                 alert("Profile berhasil diperbarui!");
                 window.location.href = 'profile.php';
@@ -119,7 +136,13 @@ if (!isset($_SESSION['user_id'])) {
                 alert("Error: " + (data.error || 'Gagal menyimpan'));
             }
         })
-        .catch(err => alert("Gagal menyimpan profil: " + err));
+        .catch(err => {
+            if (btnEl) {
+                btnEl.disabled = false;
+                btnEl.textContent = origText;
+            }
+            alert("Gagal menyimpan profil: " + err);
+        });
     }
 </script>
     </div>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Glow-in - Sign Up</title>
+    <link rel="stylesheet" href="../assets/CSS/base.css?v=101">
     <link rel="stylesheet" href="../assets/CSS/register.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -25,12 +26,12 @@
         <h1>Sign Up</h1>
 
         <div id="register-form-section">
-            <button class="btn">
-                <i class="fab fa-google" style="font-size: 1.5rem;"></i> Sign up with Google
+            <button class="btn btn-secondary">
+                <i class="fab fa-google fa-xl"></i> Sign up with Google
             </button>
 
-            <button class="btn">
-                <i class="fab fa-apple" style="font-size: 1.5rem;"></i> Sign up with Apple
+            <button class="btn btn-secondary">
+                <i class="fab fa-apple fa-xl"></i> Sign up with Apple
             </button>
 
             <div class="divider">OR</div>
@@ -55,19 +56,19 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-submit">Create Account</button>
+                <button type="submit" class="btn btn-primary mt-16">Create Account</button>
             </form>
-            <div style="margin-top: 15px; text-align: center;">
-                Already have an account? <a href="login.php" style="color: #ff6b00; text-decoration: none;">Sign in</a>
+            <div class="mt-16 text-center">
+                Already have an account? <a href="login.php" class="text-link">Sign in</a>
             </div>
         </div>
 
-        <div id="register-success-section" style="display: none; text-align: center;">
+        <div id="register-success-section" class="text-center d-none">
             <div class="success-message">
-                <i class="fas fa-check-circle" style="font-size: 3rem; display: block; margin-bottom: 10px;"></i> 
+                <i class="fas fa-check-circle fa-3x mb-16"></i> 
                 Akun berhasil dibuat!
             </div>
-            <a href="login.php" class="btn btn-submit" style="display: inline-block; text-decoration: none; margin-top: 15px;">Login Sekarang</a>
+            <a href="login.php" class="btn btn-primary mt-16">Login Sekarang</a>
         </div>
     </div>
 
@@ -102,8 +103,8 @@
             .then(res => res.json())
             .then(data => {
                 if(data.success) {
-                    document.getElementById('register-form-section').style.display = 'none';
-                    document.getElementById('register-success-section').style.display = 'block';
+                    document.getElementById('register-form-section').classList.add('d-none');
+                    document.getElementById('register-success-section').classList.remove('d-none');
                 } else {
                     errEl.textContent = data.error || 'Gagal mendaftar.';
                     errEl.style.display = 'block';

@@ -1,77 +1,57 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Poppins", sans-serif;
-}
+/* =============================================================
+   GLOW-IN REGISTER PAGE STYLES (HARMONIZED WITH BASE.CSS)
+   ============================================================= */
 
 body {
-    background-color: #f9f9fb;
+    background-color: var(--bg-color);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    padding: 1rem;
+    padding: 20px;
 }
 
 .register-container {
-    background: #fff;
-    padding: 2.5rem 2rem;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    background: var(--card-bg, #ffffff);
+    padding: 40px 32px;
+    border-radius: 24px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+    border: 1px solid #EEEEEE;
     width: 100%;
-    max-width: 500px;
+    max-width: 460px;
     text-align: center;
-    animation: fadeIn 0.6s ease;
+    animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-h1 {
-    margin-bottom: 1.5rem;
-    color: #111;
-    font-size: 4rem;
-    font-weight: 700;
+.register-container h1,
+.register-container h2 {
+    margin-bottom: 24px;
+    color: var(--text-primary);
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
 }
 
-.btn {
+.btn-google,
+.btn-apple,
+.btn-secondary,
+.btn-primary {
     width: 100%;
-    padding: 0.75rem;
-    margin: 0.4rem 0;
-    border-radius: 25px;
-    border: 2px solid #111;
-    background-color: #fff;
-    cursor: pointer;
-    font-size: 1.2rem;
-    font-weight: 700;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.btn:hover {
-    background-color: #f2f2f2;
+    margin-bottom: 12px;
 }
 
 .divider {
     display: flex;
     align-items: center;
     text-align: center;
-    margin: 1.5rem 0;
-    color: #111;
-    font-size: 1rem;
+    margin: 24px 0;
+    color: var(--text-tertiary);
+    font-size: 13px;
     font-weight: 600;
 }
 
@@ -79,75 +59,76 @@ h1 {
 .divider::after {
     content: "";
     flex: 1;
-    border-bottom: 2px solid #ddd;
-    margin: 0 0.5rem;
+    border-bottom: 1px solid var(--border-color, #E5E7EB);
+    margin: 0 12px;
 }
 
 .input-group {
     position: relative;
-    margin-bottom: 0.8rem;
+    margin-bottom: 16px;
+    text-align: left;
 }
 
-input {
-    width: 100%;
-    padding: 0.85rem 1.2rem;
-    border: 2px solid #aaa;
-    border-radius: 25px;
-    font-size: 1.2rem;
-    outline: none;
-    transition: border-color 0.2s ease;
+.input-group i {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+    color: var(--text-tertiary);
+    font-size: 16px;
+    pointer-events: none;
+    transition: color 0.2s;
 }
 
-input:focus {
-    border-color: #ff8c00;
+.input-group input:focus ~ i {
+    color: var(--accent-orange);
 }
 
 .input-row {
     display: flex;
-    gap: 1rem;
+    gap: 12px;
 }
 
 .input-row .input-group {
     flex: 1;
 }
 
-.btn-submit {
-    background-color: #ff8c00;
-    color: #fff;
-    font-weight: 500;
-    border: none;
-    text-decoration: none;
-    margin-top: 0.8rem;
-}
-
-.btn-submit:hover {
-    background-color: #f7a746;
-}
-
-.signin {
-    margin-top: 1rem;
-    font-size: 1rem;
-    color: #888;
-}
-
-.signin a {
-    color: #6a5af9;
-    text-decoration: none;
+.signin,
+.text-center {
+    margin-top: 28px;
+    font-size: 14px;
+    color: var(--text-secondary);
     font-weight: 500;
 }
 
-.signin a:hover {
+.text-link {
+    color: var(--accent-orange);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.text-link:hover {
     text-decoration: underline;
 }
 
-@media (max-width: 480px) {
-    h1 {
-        font-size: 3rem;
-    }
+.success-message {
+    color: #22c55e;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
 
+.error-message,
+.error-state {
+    color: #ef4444;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 480px) {
     .register-container {
-        width: 90%;
-        padding: 2rem 1.5rem;
+        padding: 32px 20px;
     }
 
     .input-row {

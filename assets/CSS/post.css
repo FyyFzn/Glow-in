@@ -47,29 +47,6 @@
     margin-top: 16px;
 }
 
-.btn {
-    border: 1px solid #ddd;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: 600;
-    cursor: pointer;
-    background: #fff;
-    font-family: inherit;
-    font-size: 14px;
-    text-decoration: none;
-    display: inline-block;
-}
-
-.btn.submit {
-    background: var(--accent-orange);
-    color: #fff;
-    border-color: var(--accent-orange);
-}
-
-.btn.cancel {
-    color: var(--text-secondary);
-}
-
 /* Form groups (Edit Profile) */
 .form-group {
     margin-bottom: 15px;
@@ -111,21 +88,4 @@
     display: flex;
     align-items: center;
     gap: 8px;
-}
-
-.post-visibility-select {
-    padding: 2px 8px;
-    font-size: 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    background-color: #f9fafb;
-    color: #374151;
-    cursor: pointer;
-    outline: none;
-    font-family: inherit;
-    transition: border-color 0.2s ease;
-}
-
-.post-visibility-select:focus {
-    border-color: var(--accent-orange);
 }

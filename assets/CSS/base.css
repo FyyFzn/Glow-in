@@ -107,24 +107,20 @@ body {
     display: flex;
     align-items: center;
     gap: 18px;
-    padding: 12px 0;
+    padding: 12px 16px;
     text-decoration: none;
     color: #4A4A4A;
     font-weight: 600;
     font-size: 16px;
     border-radius: 12px;
     transition: color 0.2s, background-color 0.2s;
+    box-sizing: border-box;
 }
 
 .nav-item:hover,
 .nav-item.active {
     background-color: #F4F7FE;
-    padding-left: 16px;
     color: var(--text-primary);
-}
-
-.nav-item.active {
-    padding-right: 16px;
 }
 
 .icon-wrapper {
@@ -215,7 +211,7 @@ body {
         /* Ditingkatkan agar di atas top-header (z-index 1000) */
         width: 88px;
         padding: 32px 16px;
-        transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease, box-shadow 0.3s ease;
+        transition: width 0.26s cubic-bezier(0.16, 1, 0.3, 1), padding 0.26s ease, box-shadow 0.26s ease;
         overflow-x: hidden;
         white-space: nowrap;
         background-color: #FFFFFF;
@@ -225,36 +221,32 @@ body {
         width: var(--sidebar-width-left);
         padding: 32px;
         box-shadow: 4px 0 15px rgba(0, 0, 0, 0.08);
-        /* Memberi bayangan agar terlihat melayang di atas konten */
     }
 
     .main-content {
         margin-left: 88px;
-        /* Memberi ruang untuk sidebar saat tertutup */
     }
 
-    .sidebar-left:hover {
-        width: var(--sidebar-width-left);
-        padding: 32px;
-    }
-
-    /* Sembunyikan teks secara default */
+    /* Sembunyikan teks dengan transisi cepat agar hilang sebelum sidebar menyusut */
     .sidebar-left .logo span,
     .sidebar-left .nav-item span,
     .sidebar-left .post-btn span {
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.2s ease;
         width: 0;
+        transform: translateX(-8px);
+        transition: opacity 0.1s ease, transform 0.1s ease, width 0s ease 0.1s, visibility 0s ease 0.1s;
     }
 
-    /* Munculkan teks saat di-hover */
+    /* Munculkan teks dengan transisi halus saat sidebar mengembang */
     .sidebar-left:hover .logo span,
     .sidebar-left:hover .nav-item span,
     .sidebar-left:hover .post-btn span {
         opacity: 1;
         visibility: visible;
         width: auto;
+        transform: translateX(0);
+        transition: opacity 0.22s ease 0.06s, transform 0.22s ease 0.06s, width 0s ease, visibility 0s ease;
     }
 
     /* Pusatkan icon secara default dan buang padding yang menggeser layout */
@@ -293,17 +285,11 @@ body {
 
     .sidebar-left:hover .nav-item {
         gap: 18px;
-        padding: 12px 0;
+        padding: 12px 16px;
     }
 
     .sidebar-left:hover .user-profile-mini {
         gap: 12px;
-    }
-
-    .sidebar-left:hover .nav-item:hover,
-    .sidebar-left:hover .nav-item.active {
-        padding-left: 16px;
-        padding-right: 16px;
     }
 
     .sidebar-left:hover .user-profile-mini {
@@ -416,13 +402,15 @@ select:focus,
 .sidebar-dropdown-menu a,
 .sidebar-dropdown-menu button {
     color: #374151;
-    padding: 10px 14px;
+    padding: 10px 16px !important;
     text-decoration: none;
-    display: flex;
-    align-items: center;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
     gap: 10px;
     width: 100%;
-    text-align: left;
+    box-sizing: border-box;
+    text-align: left !important;
     background: none;
     border: none;
     font-size: 14px;
@@ -482,6 +470,28 @@ select:focus,
 .post-dropdown-btn:hover {
     color: #ff6b00;
     background-color: rgba(255, 107, 0, 0.1);
+}
+
+.post-visibility-btn {
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #ff6b00;
+    background-color: rgba(255, 107, 0, 0.08);
+    border: 1.5px solid #ff6b00;
+    border-radius: 20px;
+    cursor: pointer;
+    outline: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.post-visibility-btn:hover {
+    background-color: #ff6b00;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.25);
 }
 
 /* ===== MAIN CONTENT ===== */
@@ -568,45 +578,53 @@ select:focus,
 
 .follow-pill-btn {
     background-color: #ff6b00;
-    color: #111827;
+    color: #ffffff !important;
     font-weight: 700;
     font-size: 14px;
     padding: 7px 22px;
     border-radius: 20px;
-    border: 1.5px solid #E5E7EB;
+    border: 1.5px solid #ff6b00;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 2px 8px rgba(255, 107, 0, 0.2);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.25);
 }
 
 .follow-pill-btn:hover {
-    background-color: #F4F4F0;
-    border-color: #E5E7EB;
-    color: #111827;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    background-color: rgba(248, 246, 242, 0.9);
+    border-color: #ff6b00;
+    color: #ff6b00 !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 6px 16px rgba(255, 107, 0, 0.2);
     transform: translateY(-1.5px);
 }
 
 .follow-pill-btn:active {
-    background-color: #18181B;
-    border-color: #3F3F46;
-    color: #1E293B;
-    transform: translateY(0);
+    background-color: transparent !important;
+    border-color: #ff6b00 !important;
+    color: #ff6b00 !important;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    transform: translateY(0) scale(0.96);
     box-shadow: none;
 }
 
 .follow-pill-btn.following {
-    background-color: #18181B;
-    border: 1.5px solid #3F3F46;
-    color: #334155;
-    box-shadow: none;
+    background-color: #ffffff !important;
+    border: 1.5px solid #E5E7EB !important;
+    color: #374151 !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .follow-pill-btn.following:hover {
-    background-color: #27272A;
-    border-color: #52525B;
-    color: #64748B;
-    transform: none;
+    background-color: #f9fafb !important;
+    border-color: #d1d5db !important;
+    color: #111827 !important;
+    transform: translateY(-1px);
 }
 
 .post-body {
@@ -1135,8 +1153,91 @@ select:focus,
 .mt-16 { margin-top: 16px; }
 .mt-20 { margin-top: 20px; }
 .mb-16 { margin-bottom: 16px; }
+.ml-14 { margin-left: 14px; }
+.text-xs { font-size: 11px; }
+.dropdown-left-menu { left: 0 !important; right: auto !important; min-width: 150px; top: 120%; }
 .text-center { text-align: center; }
 .d-none { display: none !important; }
+
+/* =============================================================
+   GLOBAL FORM & INPUT DESIGN SYSTEM (PREMIUM UI)
+   ============================================================= */
+.post-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 28px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid #EEEEEE;
+    margin: 28px auto;
+}
+
+.post-visibility-select {
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #ff6b00;
+    background-color: rgba(255, 107, 0, 0.08);
+    border: 1.5px solid #ff6b00;
+    border-radius: 20px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.post-visibility-select:hover {
+    background-color: #ff6b00;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.25);
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+    color: #1F2937;
+    font-size: 14px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="url"],
+textarea,
+select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 14.5px;
+    color: #111827;
+    background-color: #FAFAFA;
+    box-sizing: border-box;
+    outline: none;
+    resize: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #ff6b00;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.12);
+}
+
+.post-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+}
 
 /* =============================================================
    MASTER BUTTON DESIGN SYSTEM (GLOBAL UNIFORM BUTTONS)
@@ -1154,6 +1255,8 @@ button,
 .post-btn {
     font-family: inherit;
     font-weight: 600;
+    font-size: 14.5px;
+    padding: 10px 22px;
     text-align: center;
     text-decoration: none;
     display: inline-flex;
@@ -1165,14 +1268,16 @@ button,
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* 1. Primary Orange Variant */
+/* 1. Primary Orange Variant (3 Phases: Default, Hover, OnClick) */
 .btn-submit,
 .submit,
 .post-btn,
 .btn-primary {
-    background-color: #ff6b00;
+    background-color: #ff6b00 !important;
     color: #ffffff !important;
-    border: none;
+    border: 1.5px solid #ff6b00 !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     box-shadow: 0 4px 14px rgba(255, 107, 0, 0.28);
 }
 
@@ -1180,9 +1285,29 @@ button,
 .submit:hover,
 .post-btn:hover,
 .btn-primary:hover {
-    background-color: #e66000;
+    background-color: #F4F4F0 !important;
+    color: #ff6b00 !important;
+    border-color: #ff6b00 !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     transform: translateY(-1.5px);
-    box-shadow: 0 6px 18px rgba(255, 107, 0, 0.38);
+    box-shadow: 0 8px 20px rgba(255, 107, 0, 0.25);
+}
+
+/* Phase 3: OnClick / Active (Transparent) */
+button:active,
+.btn:active,
+.btn-submit:active,
+.submit:active,
+.post-btn:active,
+.btn-primary:active {
+    background-color: transparent !important;
+    color: #ff6b00 !important;
+    border-color: #ff6b00 !important;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    transform: translateY(0) scale(0.96);
+    box-shadow: none;
 }
 
 /* 2. Secondary Outline Variant */
@@ -1190,9 +1315,11 @@ button,
 .btn-secondary,
 .btn-google,
 .btn-apple {
-    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.9);
     color: #1f2937 !important;
     border: 1.5px solid #e5e7eb;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
 }
 
@@ -1200,7 +1327,7 @@ button,
 .btn-secondary:hover,
 .btn-google:hover,
 .btn-apple:hover {
-    background-color: #f9fafb;
+    background-color: #ffffff;
     border-color: #d1d5db;
     transform: translateY(-1px);
 }
@@ -1208,22 +1335,15 @@ button,
 /* 3. Muted / Cancel Variant */
 .cancel,
 .btn-cancel {
-    background-color: #f3f4f6;
+    background-color: rgba(243, 244, 246, 0.85);
     color: #4b5563 !important;
     border: none;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
 }
 
 .cancel:hover,
 .btn-cancel:hover {
     background-color: #e5e7eb;
     color: #1f2937 !important;
-}
-
-/* 4. Active Click Tactile Feedback */
-button:active,
-.btn:active,
-.btn-submit:active,
-.submit:active,
-.cancel:active {
-    transform: translateY(0) scale(0.98);
 }

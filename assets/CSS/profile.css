@@ -83,32 +83,6 @@
     align-items: center;
 }
 
-.btn {
-    border: 1px solid #E0E0E0;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    background-color: #FFFFFF;
-    color: var(--text-primary);
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-}
-
-.btn-follow {
-    background-color: var(--accent-green);
-    border-color: var(--accent-green);
-    color: #FFFFFF;
-}
-
-.btn-message {
-    background-color: #FFFFFF;
-    border: 1px solid #E0E0E0;
-    color: var(--text-primary);
-}
-
 .profile-bio {
     margin: 8px 0;
     color: var(--text-secondary);
