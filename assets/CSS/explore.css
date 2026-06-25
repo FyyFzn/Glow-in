@@ -3,31 +3,12 @@
    Membutuhkan: base.css
    ============================================================= */
 
-/* Search bar di dalam halaman explore */
-.search-bar-desktop {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 10px 15px;
-    background-color: #F8F9FA;
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
-    margin-bottom: 25px;
-    color: #888;
-}
-
-.search-bar-desktop i {
-    margin-right: 10px;
-    font-size: 16px;
-}
-
-.search-bar-desktop input {
-    border: none;
-    padding: 0;
-    outline: none;
-    background: transparent;
-    flex-grow: 1;
-    font-size: 14px;
+/* Tata letak khusus search bar di header explore */
+.explore-top-search {
+    margin-bottom: 0 !important;
+    flex: 1;
+    max-width: 600px;
+    margin-left: 20px;
 }
 
 /* Avatar khusus explore (ukuran lebih kecil di header) */

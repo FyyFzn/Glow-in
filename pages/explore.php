@@ -34,9 +34,9 @@ $userAvatar = !empty($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'htt
           <i class="fa-solid fa-bars"></i>
         </label>
         <img src="<?= htmlspecialchars($userAvatar) ?>" class="avatar-top" alt="Avatar">
-        <div class="search-bar-desktop">
-          <input type="text" placeholder="Search Glow-in">
+        <div class="search-bar-desktop explore-top-search">
           <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search Glow-in">
         </div>
       </header>
 

@@ -682,17 +682,26 @@ select:focus,
 .search-bar-desktop {
     display: flex;
     align-items: center;
-    padding: 10px 15px;
+    padding: 10px 16px;
     background-color: var(--light-bg);
-    border: 1px solid var(--border-color);
+    border: 1.5px solid var(--border-color);
     border-radius: 20px;
     margin-bottom: 25px;
     color: #888;
+    transition: all 0.2s ease;
+}
+
+.search-bar-desktop:focus-within {
+    background-color: #FFFFFF;
+    border-color: var(--accent-orange);
+    box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.12);
+    color: var(--accent-orange);
 }
 
 .search-bar-desktop i {
     margin-right: 10px;
     font-size: 16px;
+    transition: color 0.2s ease;
 }
 
 .search-bar-desktop input {
@@ -702,6 +711,7 @@ select:focus,
     background: transparent;
     flex-grow: 1;
     font-size: 14px;
+    color: var(--text-primary);
 }
 
 .sidebar-right {
