@@ -13,7 +13,6 @@
             <p style="margin: 0 0 12px 0; font-size: 13.5px; color: #6B7280;">Klik salah satu foto di dalam folder <code>IMG</code>:</p>
             
             <div id="global-img-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; overflow-y: auto; flex: 1; padding: 4px;">
-                <!-- Loaded dynamically -->
                 <div style="text-align: center; color: #9CA3AF; grid-column: 1/-1; padding: 20px;">Memuat gambar...</div>
             </div>
 
@@ -27,8 +26,26 @@
         </div>
     </div>
 
+    <!-- Global Popup Modal: Sesuaikan Posisi (Crop & Drag) -->
+    <div id="global-pos-modal" class="modal-overlay d-none" style="position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 16px;">
+        <div style="background: #FFFFFF; border-radius: 24px; max-width: 480px; width: 100%; padding: 24px; box-shadow: 0 25px 60px rgba(0,0,0,0.3); text-align: center; display: flex; flex-direction: column; align-items: center;">
+            <h3 style="margin: 0 0 8px 0; font-size: 18px; font-weight: 800; color: #111827;">✥ Geser untuk Menyesuaikan</h3>
+            <p style="margin: 0 0 16px 0; font-size: 13px; color: #6B7280;">Klik & tahan lalu geser gambar di dalam bingkai agar pas:</p>
+            
+            <div id="pos-modal-frame" style="width: 100%; height: 200px; background-color: #E5E7EB; background-repeat: no-repeat; background-size: cover; background-position: 50% 50%; cursor: grab; position: relative; overflow: hidden; border: 3px solid #FF6B00; box-shadow: inset 0 0 20px rgba(0,0,0,0.2);">
+            </div>
+
+            <div style="display: flex; gap: 12px; width: 100%; margin-top: 20px;">
+                <button type="button" onclick="closePosModal()" style="flex: 1; background: #F3F4F6; color: #374151; border: none; border-radius: 12px; padding: 12px; font-weight: 700; cursor: pointer;">Batal</button>
+                <button type="button" onclick="confirmReposition()" style="flex: 2; background: #FF6B00; color: white; border: none; border-radius: 12px; padding: 12px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 14px rgba(255,107,0,0.3);">Simpan Posisi</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         window.currentImagePickerTarget = null;
+        let tempPickedUrl = '';
+        let posDragState = { active: false, startX: 0, startY: 0, posX: 50, posY: 50 };
 
         function openImagePicker(targetInputId, callbackFuncName) {
             window.currentImagePickerTarget = { id: targetInputId, cb: callbackFuncName };
@@ -77,24 +94,124 @@
 
         function selectImageFromPicker(url) {
             if (!url || !window.currentImagePickerTarget) return;
+            closeImagePicker();
+
+            // Jika yang diganti adalah foto profil atau header, buka modal drag posisi!
+            if (window.currentImagePickerTarget.id === 'profile-pic' || window.currentImagePickerTarget.id === 'profile-header') {
+                tempPickedUrl = url;
+                openPosModal(window.currentImagePickerTarget.id, url);
+                return;
+            }
+
+            // Jika postingan biasa
             const targetEl = document.getElementById(window.currentImagePickerTarget.id);
             if (targetEl) {
                 targetEl.value = url;
-                // trigger change event just in case
                 targetEl.dispatchEvent(new Event('input', { bubbles: true }));
-                targetEl.dispatchEvent(new Event('change', { bubbles: true }));
             }
             if (window.currentImagePickerTarget.cb && typeof window[window.currentImagePickerTarget.cb] === 'function') {
                 window[window.currentImagePickerTarget.cb](url);
             }
-            closeImagePicker();
         }
 
-        window.onclick = function(event) {
-            const modal = document.getElementById('global-img-modal');
-            if (event.target === modal) {
-                closeImagePicker();
+        // --- Positioning Modal Drag Helpers ---
+        function openPosModal(type, url) {
+            const modal = document.getElementById('global-pos-modal');
+            const frame = document.getElementById('pos-modal-frame');
+            
+            if (type === 'profile-pic') {
+                frame.style.width = '180px';
+                frame.style.height = '180px';
+                frame.style.borderRadius = '50%';
+            } else {
+                frame.style.width = '100%';
+                frame.style.height = '160px';
+                frame.style.borderRadius = '16px';
             }
+
+            frame.style.backgroundImage = `url('${url}')`;
+            posDragState.posX = 50;
+            posDragState.posY = 50;
+            frame.style.backgroundPosition = '50% 50%';
+
+            modal.classList.remove('d-none');
+            modal.style.display = 'flex';
+        }
+
+        function closePosModal() {
+            const modal = document.getElementById('global-pos-modal');
+            modal.classList.add('d-none');
+            modal.style.display = 'none';
+        }
+
+        function confirmReposition() {
+            const posStr = `${Math.round(posDragState.posX)}% ${Math.round(posDragState.posY)}%`;
+            const inpId = window.currentImagePickerTarget.id;
+            const targetEl = document.getElementById(inpId);
+            if (targetEl) targetEl.value = tempPickedUrl;
+
+            if (inpId === 'profile-pic') {
+                const posEl = document.getElementById('profile-pos');
+                if (posEl) posEl.value = posStr;
+                const av = document.getElementById('header-avatar');
+                if (av) { av.src = tempPickedUrl; av.style.objectPosition = posStr; }
+            } else if (inpId === 'profile-header') {
+                const posEl = document.getElementById('header-pos');
+                if (posEl) posEl.value = posStr;
+                const ban = document.getElementById('header-cover-banner');
+                if (ban) { ban.style.backgroundImage = `url('${tempPickedUrl}')`; ban.style.backgroundPosition = posStr; }
+            }
+
+            closePosModal();
+        }
+
+        // Drag events setup
+        document.addEventListener('DOMContentLoaded', () => {
+            const frame = document.getElementById('pos-modal-frame');
+            if (!frame) return;
+
+            const startDrag = (clientX, clientY) => {
+                posDragState.active = true;
+                posDragState.startX = clientX;
+                posDragState.startY = clientY;
+                frame.style.cursor = 'grabbing';
+            };
+
+            const moveDrag = (clientX, clientY) => {
+                if (!posDragState.active) return;
+                const dx = clientX - posDragState.startX;
+                const dy = clientY - posDragState.startY;
+                
+                posDragState.posX = Math.max(0, Math.min(100, posDragState.posX - (dx * 0.35)));
+                posDragState.posY = Math.max(0, Math.min(100, posDragState.posY - (dy * 0.35)));
+                
+                frame.style.backgroundPosition = `${posDragState.posX}% ${posDragState.posY}%`;
+                posDragState.startX = clientX;
+                posDragState.startY = clientY;
+            };
+
+            const endDrag = () => {
+                if (posDragState.active) {
+                    posDragState.active = false;
+                    frame.style.cursor = 'grab';
+                }
+            };
+
+            frame.addEventListener('mousedown', e => startDrag(e.clientX, e.clientY));
+            window.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
+            window.addEventListener('mouseup', endDrag);
+
+            frame.addEventListener('touchstart', e => startDrag(e.touches[0].clientX, e.touches[0].clientY));
+            window.addEventListener('touchmove', e => moveDrag(e.touches[0].clientX, e.touches[0].clientY));
+            window.addEventListener('touchend', endDrag);
+        });
+
+        window.onclick = function(event) {
+            const modalImg = document.getElementById('global-img-modal');
+            const modalPos = document.getElementById('global-pos-modal');
+            if (event.target === modalImg) closeImagePicker();
+            if (event.target === modalPos) closePosModal();
+
             if (!event.target.closest('.post-dropdown-btn')) {
                 var dropdowns = document.getElementsByClassName("post-dropdown-content");
                 for (var i = 0; i < dropdowns.length; i++) {

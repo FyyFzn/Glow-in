@@ -16,6 +16,8 @@ CREATE TABLE IF NOT EXISTS users (
     points INT DEFAULT 0,
     api_key VARCHAR(255) DEFAULT NULL UNIQUE,
     is_anonymous BOOLEAN DEFAULT FALSE,
+    profile_pos VARCHAR(50) DEFAULT '50% 50%',
+    header_pos VARCHAR(50) DEFAULT '50% 50%',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

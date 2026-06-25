@@ -13,7 +13,7 @@ if (!isset($_SESSION['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - Glow-in</title>
     <link rel="stylesheet" href="../assets/CSS/base.css?v=99">
-    <link rel="stylesheet" href="../assets/CSS/profile.css">
+    <link rel="stylesheet" href="../assets/CSS/profile.css?v=116">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -96,7 +96,9 @@ function loadProfile() {
         }
 
         document.getElementById('profile-cover').style.backgroundImage = `url('${user.header_pic || 'https://images.unsplash.com/photo-1505839673365-e3971f8d9184?auto=format&fit=crop&w=1400&q=80'}')`;
+        document.getElementById('profile-cover').style.backgroundPosition = user.header_pos || '50% 50%';
         document.getElementById('profile-avatar').src = user.profile_pic || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80';
+        document.getElementById('profile-avatar').style.objectPosition = user.profile_pos || '50% 50%';
         document.getElementById('profile-name').textContent = user.name || user.username;
         document.getElementById('profile-handle').textContent = '@' + user.username;
         document.getElementById('profile-bio').textContent = user.bio || 'No bio available.';

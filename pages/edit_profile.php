@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_id'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Edit Profile - Glow-in</title>
   <link rel="stylesheet" href="../assets/CSS/base.css?v=115" />
-  <link rel="stylesheet" href="../assets/CSS/profile.css?v=115" />
+  <link rel="stylesheet" href="../assets/CSS/profile.css?v=116" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -35,12 +35,29 @@ if (!isset($_SESSION['user_id'])) {
       <div id="profile-loading" class="loading-state my-20">Memuat data profil via REST API...</div>
 
       <form id="edit-profile-form" class="settings-mockup-card d-none">
-        <!-- Top Profile Header -->
-        <div class="settings-user-header">
-          <img src="https://ui-avatars.com/api/?name=User" id="header-avatar" class="settings-avatar" alt="Avatar">
-          <div class="settings-user-meta">
-            <h2 id="header-display-name">Loading...</h2>
-            <span id="header-username">@user</span>
+        <!-- Top Profile Header & Cover Banner (Clickable) -->
+        <div style="position: relative; margin: -28px -32px 24px -32px; border-bottom: 1.5px solid #F3F4F6; border-radius: 32px 32px 0 0; overflow: hidden;">
+          <!-- Cover Banner -->
+          <div id="header-cover-banner" onclick="openImagePicker('profile-header', 'onHeaderPicSelected')" style="height: 160px; width: 100%; background-color: #E5E7EB; background-size: cover; background-position: center; cursor: pointer; position: relative;">
+            <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0">
+              <span style="color: white; font-weight: 700; background: rgba(0,0,0,0.65); padding: 8px 16px; border-radius: 20px; font-size: 13px;"><i class="fa-regular fa-image"></i> Klik untuk ubah header</span>
+            </div>
+          </div>
+
+          <!-- Avatar & User Info Row -->
+          <div style="padding: 0 32px 20px 32px; display: flex; align-items: flex-end; gap: 18px; margin-top: -44px; position: relative; z-index: 2; background: linear-gradient(to top, rgba(255,255,255,1) 30%, rgba(255,255,255,0));">
+            <!-- Clickable Avatar Circle -->
+            <div onclick="openImagePicker('profile-pic', 'onProfilePicSelected')" style="position: relative; cursor: pointer; width: 88px; height: 88px; border-radius: 50%; border: 4px solid #FFFFFF; background: #FFFFFF; box-shadow: 0 6px 20px rgba(0,0,0,0.15); flex-shrink: 0;">
+              <img src="https://ui-avatars.com/api/?name=User" id="header-avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block;" alt="Avatar">
+              <div style="position: absolute; inset: 0; border-radius: 50%; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0">
+                <i class="fa-solid fa-camera" style="color: white; font-size: 22px;"></i>
+              </div>
+            </div>
+
+            <div class="settings-user-meta" style="margin-bottom: 4px;">
+              <h2 id="header-display-name" style="font-size: 20px; font-weight: 800; margin: 0 0 2px 0; color: #111827;">Loading...</h2>
+              <span id="header-username" style="font-size: 14px; color: #6B7280; font-weight: 600;">@user</span>
+            </div>
           </div>
         </div>
 
@@ -64,22 +81,6 @@ if (!isset($_SESSION['user_id'])) {
             <textarea id="profile-bio" class="settings-textarea" rows="2" placeholder="Tulis bio singkat"></textarea>
           </div>
 
-          <div class="settings-item">
-            <div class="settings-item-left">
-              <i class="fa-regular fa-circle-user settings-icon"></i>
-              <span>Foto Profil</span>
-            </div>
-            <button type="button" class="btn cancel text-xs py-2 px-4 rounded-xl font-bold border" onclick="openImagePicker('profile-pic', 'onProfilePicSelected')">🖼️ Pilih dari IMG</button>
-          </div>
-
-          <div class="settings-item">
-            <div class="settings-item-left">
-              <i class="fa-regular fa-image settings-icon"></i>
-              <span>Sampul Header</span>
-            </div>
-            <button type="button" class="btn cancel text-xs py-2 px-4 rounded-xl font-bold border" onclick="openImagePicker('profile-header', 'onHeaderPicSelected')">🖼️ Pilih dari IMG</button>
-          </div>
-
           <div class="settings-item clickable-setting" onclick="alert('Fitur Ubah Kata Sandi segera hadir!')">
             <div class="settings-item-left">
               <i class="fa-solid fa-lock settings-icon"></i>
@@ -99,6 +100,9 @@ if (!isset($_SESSION['user_id'])) {
             </label>
           </div>
         </div>
+
+        <input type="hidden" id="profile-pos" value="50% 50%">
+        <input type="hidden" id="header-pos" value="50% 50%">
 
         <!-- Section 2: Pengaturan Keamanan dan Akun -->
         <div class="settings-section">
@@ -188,10 +192,16 @@ if (!isset($_SESSION['user_id'])) {
                 document.getElementById('profile-location').value = user.location || '';
                 document.getElementById('profile-pic').value = user.profile_pic || '';
                 document.getElementById('profile-header').value = user.header_pic || '';
+                document.getElementById('profile-pos').value = user.profile_pos || '50% 50%';
+                document.getElementById('header-pos').value = user.header_pos || '50% 50%';
                 document.getElementById('profile-anonim').checked = isAnon;
 
+                // Apply saved positions
+                if (user.profile_pos) document.getElementById('header-avatar').style.objectPosition = user.profile_pos;
+                if (user.header_pos) document.getElementById('header-cover-banner').style.backgroundPosition = user.header_pos;
+
                 // Update Top Preview
-                updateHeaderPreview(displayName, user.username, user.profile_pic, isAnon);
+                updateHeaderPreview(displayName, user.username, user.profile_pic, user.header_pic, isAnon);
             }
         })
         .catch(() => {
@@ -201,14 +211,19 @@ if (!isset($_SESSION['user_id'])) {
         // Event listener saat mengetik nama
         document.getElementById('profile-name').addEventListener('input', (e) => {
             const isAnon = document.getElementById('profile-anonim').checked;
-            updateHeaderPreview(e.target.value.trim() || currentUserData.username || 'User', currentUserData.username, currentUserData.profile_pic, isAnon);
+            updateHeaderPreview(e.target.value.trim() || currentUserData.username || 'User', currentUserData.username, currentUserData.profile_pic, currentUserData.header_pic, isAnon);
         });
     });
 
-    function updateHeaderPreview(name, handle, pic, isAnon) {
+    function updateHeaderPreview(name, handle, pic, cover, isAnon) {
         const avatarEl = document.getElementById('header-avatar');
+        const bannerEl = document.getElementById('header-cover-banner');
         const nameEl = document.getElementById('header-display-name');
         const handleEl = document.getElementById('header-username');
+
+        if (cover) {
+            bannerEl.style.backgroundImage = `url('${cover}')`;
+        }
 
         if (isAnon) {
             avatarEl.src = 'https://ui-avatars.com/api/?name=Anonim&background=4b5563&color=ffffff';
@@ -222,18 +237,24 @@ if (!isset($_SESSION['user_id'])) {
     }
 
     function onProfilePicSelected(url) {
-        if(url && !document.getElementById('profile-anonim').checked) {
-            document.getElementById('header-avatar').src = url;
+        if(url) {
+            document.getElementById('profile-pic').value = url;
+            if(!document.getElementById('profile-anonim').checked) {
+                document.getElementById('header-avatar').src = url;
+            }
         }
     }
 
     function onHeaderPicSelected(url) {
-        if(url) alert('Sampul Header berhasil dipilih!');
+        if(url) {
+            document.getElementById('profile-header').value = url;
+            document.getElementById('header-cover-banner').style.backgroundImage = `url('${url}')`;
+        }
     }
 
     function toggleAnonimPreview(checkbox) {
         const currentName = document.getElementById('profile-name').value.trim() || currentUserData.name || currentUserData.username || 'User';
-        updateHeaderPreview(currentName, currentUserData.username, currentUserData.profile_pic, checkbox.checked);
+        updateHeaderPreview(currentName, currentUserData.username, currentUserData.profile_pic, currentUserData.header_pic, checkbox.checked);
     }
 
     function saveProfile() {
@@ -256,6 +277,8 @@ if (!isset($_SESSION['user_id'])) {
             location: document.getElementById('profile-location').value.trim(),
             profile_pic: document.getElementById('profile-pic').value.trim(),
             header_pic: document.getElementById('profile-header').value.trim(),
+            profile_pos: document.getElementById('profile-pos').value.trim(),
+            header_pos: document.getElementById('header-pos').value.trim(),
             is_anonymous: document.getElementById('profile-anonim').checked ? 1 : 0
         };
 

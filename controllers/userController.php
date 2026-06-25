@@ -7,7 +7,7 @@ $user_id = isset($_GET["id"]) ? $_GET["id"] : null;
 
 if ($method == "GET") {
     if ($user_id != null) {
-        $query = "SELECT id, username, name, bio, location, profile_pic, header_pic, is_anonymous, created_at FROM users WHERE id = ?";
+        $query = "SELECT id, username, name, bio, location, profile_pic, header_pic, profile_pos, header_pos, is_anonymous, created_at FROM users WHERE id = ?";
         $stmt = $pdo->prepare($query);
         $stmt->execute([$user_id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -21,7 +21,7 @@ if ($method == "GET") {
             }
         }
     } else {
-        $query = "SELECT id, username, name, bio, location, profile_pic, header_pic, is_anonymous, created_at FROM users ORDER BY username ASC";
+        $query = "SELECT id, username, name, bio, location, profile_pic, header_pic, profile_pos, header_pos, is_anonymous, created_at FROM users ORDER BY username ASC";
         $stmt = $pdo->query($query);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -35,7 +35,7 @@ else if ($method == "PUT") {
     }
 
     $input = json_decode(file_get_contents("php://input"), true);
-    $allowed_fields = ['username', 'name', 'bio', 'location', 'profile_pic', 'header_pic', 'is_anonymous'];
+    $allowed_fields = ['username', 'name', 'bio', 'location', 'profile_pic', 'header_pic', 'profile_pos', 'header_pos', 'is_anonymous'];
     $update_data = [];
 
     foreach ($allowed_fields as $field) {
@@ -68,6 +68,12 @@ else if ($method == "PUT") {
     }
     if (isset($update_data['profile_pic']) && $update_data['profile_pic'] !== '') {
         $_SESSION['profile_pic'] = $update_data['profile_pic'];
+    }
+    if (isset($update_data['profile_pos'])) {
+        $_SESSION['profile_pos'] = $update_data['profile_pos'];
+    }
+    if (isset($update_data['header_pos'])) {
+        $_SESSION['header_pos'] = $update_data['header_pos'];
     }
     if (isset($update_data['is_anonymous'])) {
         $_SESSION['is_anonymous'] = intval($update_data['is_anonymous']);
