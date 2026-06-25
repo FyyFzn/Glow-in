@@ -15,8 +15,8 @@ $profilePic = !empty($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : ('ht
     <title>Leaderboard - Glow-in</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/CSS/base.css?v=8">
-    <link rel="stylesheet" href="../assets/CSS/leaderboard.css">
+    <link rel="stylesheet" href="../assets/CSS/base.css?v=102">
+    <link rel="stylesheet" href="../assets/CSS/leaderboard.css?v=102">
 </head>
 <body>
 <input type="checkbox" id="menu-toggle" class="hidden-checkbox">
@@ -33,10 +33,6 @@ $profilePic = !empty($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : ('ht
         </header>
 
         <div class="container">
-        <div class="filters">
-            <select><option>All Time</option></select>
-            <select><option>Top Users</option></select>
-        </div>
 
         <div class="rank-card">
             <div class="rank-left">

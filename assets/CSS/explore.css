@@ -1,5 +1,5 @@
 /* =============================================================
-   EXPLORE.CSS — Styles khusus halaman Explore
+   EXPLORE.CSS — Pinterest-Style Photo Grid UI
    Membutuhkan: base.css
    ============================================================= */
 
@@ -11,26 +11,127 @@
     margin-left: 20px;
 }
 
-/* Avatar khusus explore (ukuran lebih kecil di header) */
+.explore-grid-container {
+    max-width: 1400px !important;
+    padding: 0 24px !important;
+}
+
 .avatar-top {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1.5px solid var(--border-color);
+}
+
+/* ===== PINTEREST GRID SYSTEM ===== */
+.pinterest-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 22px;
+    padding: 10px 0 40px 0;
+    width: 100%;
+}
+
+.pinterest-card {
+    background: #FFFFFF;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+    border: 1px solid #F0F0F0;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+.pinterest-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+.pinterest-img-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    background-color: #F3F4F6;
+    aspect-ratio: 4 / 5;
+}
+
+.pinterest-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    display: block;
+}
+
+.pinterest-card:hover .pinterest-img-wrapper img {
+    transform: scale(1.05);
+}
+
+.pinterest-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, transparent 40%);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    display: flex;
+    align-items: flex-end;
+    padding: 16px;
+}
+
+.pinterest-card:hover .pinterest-overlay {
+    opacity: 1;
+}
+
+.pinterest-likes {
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+.pinterest-likes i {
+    color: #FF4D4D;
+}
+
+.pinterest-card-footer {
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #FFFFFF;
+}
+
+.pinterest-avatar {
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     object-fit: cover;
 }
 
-.explore-card {
-    cursor: pointer;
+.pinterest-username {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text-primary, #1A1A1A);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.explore-card-link {
-    display: block;
-}
-
-.explore-post-body {
-    margin-top: 10px;
-}
-
-.explore-tweet-actions {
-    margin-top: 15px;
+@media (max-width: 640px) {
+    .pinterest-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 14px;
+    }
+    .pinterest-card-footer {
+        padding: 10px 12px;
+    }
 }

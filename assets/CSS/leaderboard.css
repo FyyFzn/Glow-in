@@ -152,6 +152,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 28px;
     margin-bottom: 28px;
     box-shadow: 0 8px 24px rgba(255, 106, 61, 0.3);
     position: relative;

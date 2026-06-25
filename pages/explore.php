@@ -30,18 +30,14 @@ $userAvatar = !empty($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'htt
 
     <main class="main-content">
       <header class="top-header">
-        <label for="menu-toggle" class="menu-toggle-btn" aria-label="Buka Menu">
+        <label for="menu-toggle" class="menu-toggle-btn">
           <i class="fa-solid fa-bars"></i>
         </label>
-        <img src="<?= htmlspecialchars($userAvatar) ?>" class="avatar-top" alt="Avatar">
-        <div class="search-bar-desktop explore-top-search">
-          <i class="fas fa-search"></i>
-          <input type="text" placeholder="Search Glow-in">
-        </div>
+        <h1>Explore</h1>
       </header>
 
-      <div class="container">
-        <div id="posts-container">
+      <div class="container explore-grid-container">
+        <div id="posts-container" class="pinterest-grid">
           <p class="empty-state">Memuat postingan...</p>
         </div>
       </div>
@@ -64,39 +60,33 @@ $userAvatar = !empty($_SESSION['profile_pic']) ? $_SESSION['profile_pic'] : 'htt
         .then(response => response.json())
         .then(data => {
             const container = document.getElementById('posts-container');
-            if (data.error || !Array.isArray(data) || data.length === 0) {
-                container.innerHTML = '<p class="empty-state">Belum ada postingan</p>';
+            if (data.error || !Array.isArray(data)) {
+                container.innerHTML = '<p class="empty-state">Gagal memuat postingan</p>';
+                return;
+            }
+            const photoPosts = data.filter(post => post.image && post.image.trim() !== '');
+            if (photoPosts.length === 0) {
+                container.innerHTML = '<p class="empty-state">Belum ada foto untuk ditampilkan</p>';
                 return;
             }
             container.innerHTML = '';
 
-            data.forEach(post => {
-                let imgHtml = '';
-                if (post.image && post.image.trim() !== '') {
-                    imgHtml = `<div class="tweet-media"><img src="${post.image}" alt="Post Image"></div>`;
-                }
-
-                const postHtml = `
-                <article class="tweet-card explore-card">
-                    <div onclick="window.location.href='detail.php?id=${post.id}';" class="click-post explore-card-link clickable-card">
-                        <div class="post-header">
-                            <img src="${post.profile_pic}" class="avatar" alt="Avatar">
-                            <div class="post-user-info">
-                                <span class="name">${post.username}</span>
-                            </div>
-                        </div>
-                        <p class="post-body explore-post-body">${post.content}</p>
-                        ${imgHtml}
-                        <div class="post-divider"></div>
-                        <div class="tweet-actions explore-tweet-actions">
-                            <div class="item"><i class="fa-regular fa-heart"></i><span>${post.like_count || 0}</span></div>
-                            <div class="item" onclick="event.stopPropagation();"><i class="fa-regular fa-comment"></i><span>${post.comment_count || 0}</span></div>
-                            <div class="item" onclick="event.stopPropagation();"><i class="fa-solid fa-share-nodes"></i><span>0</span></div>
+            photoPosts.forEach(post => {
+                const cardHtml = `
+                <div class="pinterest-card" onclick="window.location.href='detail.php?id=${post.id}';">
+                    <div class="pinterest-img-wrapper">
+                        <img src="${post.image}" alt="Explore Photo">
+                        <div class="pinterest-overlay">
+                            <div class="pinterest-likes"><i class="fa-solid fa-heart"></i> ${post.like_count || 0}</div>
                         </div>
                     </div>
-                </article>
+                    <div class="pinterest-card-footer">
+                        <img src="${post.profile_pic}" class="pinterest-avatar" alt="Avatar">
+                        <span class="pinterest-username">${post.username}</span>
+                    </div>
+                </div>
                 `;
-                container.innerHTML += postHtml;
+                container.innerHTML += cardHtml;
             });
         })
         .catch(() => {
