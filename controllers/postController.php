@@ -24,7 +24,39 @@ if ($method == "GET") {
                 $data['username'] = 'Anonim';
                 $data['profile_pic'] = 'https://ui-avatars.com/api/?name=Anonim&background=4b5563&color=ffffff';
                 $data['user_id'] = 0;
+            } else {
+                $data['username'] = 'Anonim (Anda)';
+                $data['profile_pic'] = 'https://ui-avatars.com/api/?name=Anonim&background=4b5563&color=ffffff';
             }
+        }
+    } else if (isset($_GET['user_id'])) {
+        $target_id = intval($_GET['user_id']);
+        if ($target_id == $user['id']) {
+            $query = "
+                SELECT posts.*, COALESCE(NULLIF(users.name, ''), users.username) AS username, users.profile_pic, users.is_anonymous AS user_is_anonymous,
+                (SELECT COUNT(*) FROM comments WHERE comments.post_id = posts.id) as comment_count,
+                (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) as like_count
+                FROM posts
+                JOIN users ON posts.user_id = users.id
+                WHERE posts.user_id = ?
+                ORDER BY posts.created_at DESC
+            ";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute([$target_id]);
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            $query = "
+                SELECT posts.*, COALESCE(NULLIF(users.name, ''), users.username) AS username, users.profile_pic, users.is_anonymous AS user_is_anonymous,
+                (SELECT COUNT(*) FROM comments WHERE comments.post_id = posts.id) as comment_count,
+                (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.id) as like_count
+                FROM posts
+                JOIN users ON posts.user_id = users.id
+                WHERE posts.user_id = ? AND posts.is_anonymous = 0 AND (users.is_anonymous IS NULL OR users.is_anonymous = 0)
+                ORDER BY posts.created_at DESC
+            ";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute([$target_id]);
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
     } else {
         $query = "
@@ -45,6 +77,9 @@ if ($method == "GET") {
                         $row['username'] = 'Anonim';
                         $row['profile_pic'] = 'https://ui-avatars.com/api/?name=Anonim&background=4b5563&color=ffffff';
                         $row['user_id'] = 0;
+                    } else {
+                        $row['username'] = 'Anonim (Anda)';
+                        $row['profile_pic'] = 'https://ui-avatars.com/api/?name=Anonim&background=4b5563&color=ffffff';
                     }
                 }
             }

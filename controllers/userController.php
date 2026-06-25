@@ -21,9 +21,26 @@ if ($method == "GET") {
             }
         }
     } else {
-        $query = "SELECT id, username, name, bio, location, profile_pic, header_pic, profile_pos, header_pos, is_anonymous, created_at FROM users ORDER BY username ASC";
-        $stmt = $pdo->query($query);
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (isset($_GET['search']) && trim($_GET['search']) !== '') {
+            $kw = "%" . trim($_GET['search']) . "%";
+            $query = "SELECT id, username, name, bio, location, profile_pic, header_pic, profile_pos, header_pos, is_anonymous, created_at FROM users WHERE username LIKE ? OR name LIKE ? ORDER BY username ASC LIMIT 15";
+            $stmt = $pdo->prepare($query);
+            $stmt->execute([$kw, $kw]);
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            $query = "SELECT id, username, name, bio, location, profile_pic, header_pic, profile_pos, header_pos, is_anonymous, created_at FROM users ORDER BY username ASC";
+            $stmt = $pdo->query($query);
+            $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        foreach ($data as &$row) {
+            if (!empty($row['is_anonymous']) && $row['id'] != $user['id']) {
+                $row['username'] = 'anonim';
+                $row['name'] = 'Akun Anonim';
+                $row['profile_pic'] = 'https://ui-avatars.com/api/?name=Anonim&background=4b5563&color=ffffff';
+                $row['bio'] = 'Akun ini dalam mode anonim privat.';
+            }
+        }
     }
 
     echo json_encode($data);

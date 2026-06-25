@@ -46,7 +46,7 @@ if (!isset($_SESSION['user_id'])) {
                             </div>
                             <div class="profile-handle" id="profile-handle"></div>
                         </div>
-                        <div class="profile-actions">
+                        <div class="profile-actions" id="profile-actions">
                             <a href="edit_profile.php" class="btn btn-message">Edit Profile</a>
                         </div>
                     </div>
@@ -82,7 +82,8 @@ if (!isset($_SESSION['user_id'])) {
 
 <script>
 const apiKey = "<?= $_SESSION['api_key'] ?? '' ?>";
-const currentUserId = "<?= $_SESSION['user_id'] ?? '' ?>";
+const urlParams = new URLSearchParams(window.location.search);
+const currentUserId = urlParams.get('id') || "<?= $_SESSION['user_id'] ?? '' ?>";
 
 function loadProfile() {
     fetch('../controllers/userController.php?id=' + currentUserId, {
@@ -106,14 +107,59 @@ function loadProfile() {
 
         const joinedDate = new Date(user.created_at);
         document.getElementById('profile-joined').textContent = joinedDate.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+
+        // Action buttons logic (Self vs Others)
+        const loggedInId = parseInt("<?= $_SESSION['user_id'] ?? 0 ?>");
+        const actionsEl = document.querySelector('.profile-actions');
+        if (actionsEl) {
+            if (parseInt(user.id) === loggedInId) {
+                actionsEl.innerHTML = '<a href="edit_profile.php" class="btn btn-message font-bold">Edit Profile</a>';
+            } else {
+                fetch('../controllers/followController.php?user_id=' + user.id, {
+                    headers: { 'Authorization': 'Bearer ' + apiKey }
+                })
+                .then(r => r.json())
+                .then(fData => {
+                    const isF = (fData && fData.success) || (fData && fData.is_following);
+                    actionsEl.innerHTML = `<button type="button" class="follow-pill-btn ${isF ? 'following' : ''}" onclick="toggleProfileFollow(${user.id}, this)">${isF ? 'Following' : 'Follow'}</button>`;
+                })
+                .catch(() => {
+                    actionsEl.innerHTML = `<button type="button" class="follow-pill-btn" onclick="toggleProfileFollow(${user.id}, this)">Follow</button>`;
+                });
+            }
+        }
     })
     .catch(error => {
         console.error('Error loading profile:', error);
     });
 }
 
+async function toggleProfileFollow(userId, btnEl) {
+    const isF = btnEl.classList.contains('following');
+    const method = isF ? 'DELETE' : 'POST';
+    
+    btnEl.disabled = true;
+    try {
+        const res = await fetch('../controllers/followController.php?user_id=' + userId, {
+            method: method,
+            headers: { 'Authorization': 'Bearer ' + apiKey }
+        });
+        const data = await res.json();
+        if (data && (data.success || !data.error)) {
+            if (isF) {
+                btnEl.textContent = 'Follow';
+                btnEl.classList.remove('following');
+            } else {
+                btnEl.textContent = 'Following';
+                btnEl.classList.add('following');
+            }
+        }
+    } catch(e) {}
+    btnEl.disabled = false;
+}
+
 function loadUserPosts() {
-    fetch('../controllers/postController.php', {
+    fetch('../controllers/postController.php?user_id=' + currentUserId, {
         headers: { 'Authorization': 'Bearer ' + apiKey }
     })
     .then(response => response.json())
