@@ -43,8 +43,13 @@ if ($method == "GET") {
     echo json_encode($data);
 } 
 else if ($method == "POST") {
-    $stmt = $pdo->prepare("INSERT INTO follows (follower_id, following_id) VALUES (?, ?)");
+    $stmt = $pdo->prepare("INSERT IGNORE INTO follows (follower_id, following_id) VALUES (?, ?)");
     $stmt->execute([$user['id'], $target_user_id]);
+
+    if ($target_user_id && $target_user_id != $user['id']) {
+        $notifStmt = $pdo->prepare("INSERT INTO notifications (user_id, actor_id, type) VALUES (?, ?, 'follow')");
+        $notifStmt->execute([$target_user_id, $user['id']]);
+    }
 
     echo json_encode(["success" => true, "message" => "Berhasil mengikuti pengguna ini"]);
 } 

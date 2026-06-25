@@ -32,6 +32,8 @@ CREATE TABLE IF NOT EXISTS posts (
     user_id INT NOT NULL,
     category_id INT DEFAULT NULL,
     content TEXT NOT NULL,
+    image VARCHAR(255) DEFAULT NULL,
+    is_anonymous BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
@@ -119,15 +121,11 @@ CREATE TABLE IF NOT EXISTS notifications (
     FOREIGN KEY (actor_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Contoh Data Users
+-- Data Dummy Users untuk Role
 INSERT INTO users (username, password, name, bio, location, role, points, api_key) VALUES
-('johndoe', '$2y$10$YourHashedPasswordHere1', 'John Doe', 'Hello, I am John!', 'Jakarta', 'postinger', 1500, 'api_johndoe123'),
-('janedoe', '$2y$10$YourHashedPasswordHere2', 'Jane Doe', 'Love to code!', 'Bandung', 'postinger', 2000, 'api_janedoe456'),
-('alexsmith', '$2y$10$YourHashedPasswordHere3', 'Alex Smith', 'Designer & Developer', 'Surabaya', 'spesialis', 1800, 'api_alexsmith789'),
-('sarahwilson', '$2y$10$YourHashedPasswordHere4', 'Sarah Wilson', 'Content Creator', 'Yogyakarta', 'postinger', 2200, 'api_sarahwilson012'),
-('mikejohnson', '$2y$10$YourHashedPasswordHere5', 'Mike Johnson', 'Tech Enthusiast', 'Medan', 'postinger', 1600, 'api_mikejohnson345'),
-('emilydavis', '$2y$10$YourHashedPasswordHere6', 'Emily Davis', 'Photographer', 'Semarang', 'spesialis', 1900, 'api_emilydavis678'),
-('admin', '$2y$10$YourHashedPasswordHere7', 'Admin', 'Administrator', 'Jakarta', 'admin', 0, 'api_admin901');
+('postinger', '$2y$10$6Y5nwjSq.20inDd.k9fY1.21oUBYEloMqaDTQ0uu2N.SpxzcxZRMe', 'Postinger', 'Akun Postinger', 'Jakarta', 'postinger', 1000, 'api_postinger_key'),
+('spesialis', '$2y$10$6Y5nwjSq.20inDd.k9fY1.21oUBYEloMqaDTQ0uu2N.SpxzcxZRMe', 'Spesialis', 'Akun Spesialis', 'Bandung', 'spesialis', 1000, 'api_spesialis_key'),
+('admin', '$2y$10$6Y5nwjSq.20inDd.k9fY1.21oUBYEloMqaDTQ0uu2N.SpxzcxZRMe', 'Admin', 'Akun Admin', 'Surabaya', 'admin', 0, 'api_admin_key');
 
 -- 11. Likes
 CREATE TABLE IF NOT EXISTS likes (

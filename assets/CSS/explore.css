@@ -37,3 +37,19 @@
     border-radius: 50%;
     object-fit: cover;
 }
+
+.explore-card {
+    cursor: pointer;
+}
+
+.explore-card-link {
+    display: block;
+}
+
+.explore-post-body {
+    margin-top: 10px;
+}
+
+.explore-tweet-actions {
+    margin-top: 15px;
+}

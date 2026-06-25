@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'config.php';
+require_once '../config.php';
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
@@ -12,8 +12,8 @@ if (!isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - Glow-in</title>
-    <link rel="stylesheet" href="assets/CSS/base.css?v=6">
-    <link rel="stylesheet" href="assets/CSS/profile.css">
+    <link rel="stylesheet" href="../assets/CSS/base.css?v=99">
+    <link rel="stylesheet" href="../assets/CSS/profile.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -21,7 +21,7 @@ if (!isset($_SESSION['user_id'])) {
 <input type="checkbox" id="menu-toggle" class="hidden-checkbox">
 
 <div class="layout">
-    <?php require_once 'includes/sidebar.php'; ?>
+    <?php require_once '../includes/sidebar.php'; ?>
 
     <main class="main-content">
         <header class="top-header">
@@ -76,8 +76,8 @@ if (!isset($_SESSION['user_id'])) {
         </div>
     </main>
 
-    <?php require_once 'includes/rightbar.php'; ?>
-    <?php require_once 'includes/footer.php'; ?>
+    <?php require_once '../includes/rightbar.php'; ?>
+    <?php require_once '../includes/footer.php'; ?>
 </div>
 
 <script>
@@ -85,7 +85,7 @@ const apiKey = "<?= $_SESSION['api_key'] ?? '' ?>";
 const currentUserId = "<?= $_SESSION['user_id'] ?? '' ?>";
 
 function loadProfile() {
-    fetch('api/users.php?id=' + currentUserId, {
+    fetch('../controllers/userController.php?id=' + currentUserId, {
         headers: { 'Authorization': 'Bearer ' + apiKey }
     })
     .then(response => response.json())
@@ -111,7 +111,7 @@ function loadProfile() {
 }
 
 function loadUserPosts() {
-    fetch('api/posts.php', {
+    fetch('../controllers/postController.php', {
         headers: { 'Authorization': 'Bearer ' + apiKey }
     })
     .then(response => response.json())
@@ -122,26 +122,29 @@ function loadUserPosts() {
         const userPosts = Array.isArray(posts) ? posts.filter(post => post.user_id == currentUserId) : [];
 
         if (userPosts.length === 0) {
-            container.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">No posts yet.</p>';
+            container.innerHTML = '<p class="empty-state">No posts yet.</p>';
             return;
         }
 
         userPosts.forEach(post => {
-            const date = new Date(post.created_at).toLocaleString('id-ID');
+            let imgHtml = '';
+            if (post.image && post.image.trim() !== '') {
+                imgHtml = `<div class="tweet-media"><img src="${post.image}" alt="Post Image"></div>`;
+            }
 
             const postHtml = `
-            <article class="tweet-card">
+            <article class="tweet-card clickable-card" onclick="window.location.href='detail.php?id=${post.id}';">
                 <div class="post-header">
                     <img src="${post.profile_pic}" class="avatar" alt="Avatar">
                     <div class="post-user-info">
-                        <div class="name">${post.username}</div>
-                        <div class="handle">@${post.username} • ${date}</div>
+                        <span class="name">${post.username}</span>
                     </div>
                 </div>
-                <p class="post-body" style="margin-top: 10px;">${post.content}</p>
-
-                <div class="tweet-actions" style="margin-top: 15px;">
-                    <div class="item"><i class="fa-regular fa-heart"></i><span>0</span></div>
+                <p class="post-body">${post.content}</p>
+                ${imgHtml}
+                <div class="post-divider"></div>
+                <div class="tweet-actions">
+                    <div class="item"><i class="fa-regular fa-heart"></i><span>${post.like_count || 0}</span></div>
                     <div class="item"><i class="fa-regular fa-comment"></i><span>${post.comment_count || 0}</span></div>
                     <div class="item"><i class="fa-solid fa-share-nodes"></i><span>0</span></div>
                 </div>
@@ -152,7 +155,7 @@ function loadUserPosts() {
     })
     .catch(error => {
         console.error('Error loading posts:', error);
-        document.getElementById('user-posts-container').innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">Failed to load posts.</p>';
+        document.getElementById('user-posts-container').innerHTML = '<p class="error-state">Failed to load posts.</p>';
     });
 }
 

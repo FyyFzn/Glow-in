@@ -99,3 +99,33 @@
 .form-group textarea:focus {
     border-color: var(--accent-orange);
 }
+
+/* Post form header and visibility dropdown */
+.post-header-flex {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.post-user-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.post-visibility-select {
+    padding: 2px 8px;
+    font-size: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: #f9fafb;
+    color: #374151;
+    cursor: pointer;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+}
+
+.post-visibility-select:focus {
+    border-color: var(--accent-orange);
+}

@@ -1,7 +1,15 @@
 /* =============================================================
-   BASE.CSS — Glow-in Shared Styles
-   Berisi: CSS variables, reset, layout, sidebar, tweet-card,
-   rightbar, dan responsive. Digunakan oleh semua halaman.
+   BASE.CSS — Glow-in Master Shared Design System
+   =============================================================
+   DAFTAR ISI (TABLE OF CONTENTS):
+   1. CSS VARIABLES & THEME TOKENS
+   2. RESET & GLOBAL TYPOGRAPHY
+   3. BASE LAYOUT & NAVIGATION STRUCTURE
+   4. SIDEBAR DESKTOP & MOBILE NAVIGATION
+   5. POST CARD & FEED UI (TWEET-CARD)
+   6. INTERACTIVE BUTTONS & BADGES
+   7. MODALS, TOASTS & REALTIME BANNER
+   8. RESPONSIVE MEDIA QUERIES
    ============================================================= */
 
 /* ===== CSS VARIABLES ===== */
@@ -194,7 +202,8 @@ body {
 /* ===== INSTAGRAM-STYLE SIDEBAR (DESKTOP ONLY) ===== */
 @media (min-width: 1101px) {
     .layout {
-        position: relative; /* Agar absolute sidebar sejajar di dalam layout */
+        position: relative;
+        /* Agar absolute sidebar sejajar di dalam layout */
     }
 
     .sidebar-left {
@@ -202,7 +211,8 @@ body {
         top: 0;
         bottom: 0;
         left: 0;
-        z-index: 2000; /* Ditingkatkan agar di atas top-header (z-index 1000) */
+        z-index: 2000;
+        /* Ditingkatkan agar di atas top-header (z-index 1000) */
         width: 88px;
         padding: 32px 16px;
         transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease, box-shadow 0.3s ease;
@@ -210,17 +220,19 @@ body {
         white-space: nowrap;
         background-color: #FFFFFF;
     }
-    
+
     .sidebar-left:hover {
         width: var(--sidebar-width-left);
         padding: 32px;
-        box-shadow: 4px 0 15px rgba(0,0,0,0.08); /* Memberi bayangan agar terlihat melayang di atas konten */
+        box-shadow: 4px 0 15px rgba(0, 0, 0, 0.08);
+        /* Memberi bayangan agar terlihat melayang di atas konten */
     }
 
     .main-content {
-        margin-left: 88px; /* Memberi ruang untuk sidebar saat tertutup */
+        margin-left: 88px;
+        /* Memberi ruang untuk sidebar saat tertutup */
     }
-    
+
     .sidebar-left:hover {
         width: var(--sidebar-width-left);
         padding: 32px;
@@ -256,9 +268,10 @@ body {
         height: 48px;
         margin-left: auto;
         margin-right: auto;
-        gap: 0; /* PENTING: Hilangkan gap agar icon benar-benar di tengah */
+        gap: 0;
+        /* PENTING: Hilangkan gap agar icon benar-benar di tengah */
     }
-    
+
     .sidebar-left .logo {
         height: auto;
         margin-bottom: 40px;
@@ -273,11 +286,20 @@ body {
         margin-left: 0;
         margin-right: 0;
     }
-    
-    .sidebar-left:hover .logo { gap: 12px; }
-    .sidebar-left:hover .nav-item { gap: 18px; padding: 12px 0; }
-    .sidebar-left:hover .user-profile-mini { gap: 12px; }
-    
+
+    .sidebar-left:hover .logo {
+        gap: 12px;
+    }
+
+    .sidebar-left:hover .nav-item {
+        gap: 18px;
+        padding: 12px 0;
+    }
+
+    .sidebar-left:hover .user-profile-mini {
+        gap: 12px;
+    }
+
     .sidebar-left:hover .nav-item:hover,
     .sidebar-left:hover .nav-item.active {
         padding-left: 16px;
@@ -298,7 +320,7 @@ body {
     .sidebar-left:hover .post-dropdown {
         display: block;
     }
-    
+
     /* Tombol Post melingkar saat kecil */
     .sidebar-left .post-btn {
         width: 48px;
@@ -306,12 +328,14 @@ body {
         padding: 0;
         border-radius: 50%;
         margin: 0 auto 32px auto;
-        color: transparent; /* Sembunyikan teks asli */
+        color: transparent;
+        /* Sembunyikan teks asli */
         position: relative;
     }
-    
+
     .sidebar-left .post-btn::after {
-        content: '+'; /* Ganti dengan icon plus */
+        content: '+';
+        /* Ganti dengan icon plus */
         color: white;
         position: absolute;
         font-size: 24px;
@@ -323,7 +347,7 @@ body {
         padding: 16px;
         color: white;
     }
-    
+
     .sidebar-left:hover .post-btn::after {
         display: none;
     }
@@ -335,42 +359,108 @@ body {
     display: inline-block;
 }
 
-.post-dropdown-content {
+/* GLOBAL SELECT & FORM DROPDOWNS */
+select,
+.custom-select,
+.post-visibility-select {
+    appearance: none;
+    background-color: #ffffff;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 8px 32px 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #111827;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    transition: all 0.2s ease;
+}
+
+select:hover,
+select:focus,
+.custom-select:focus,
+.post-visibility-select:focus {
+    border-color: #ff6b00;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.15);
+}
+
+/* GLOBAL ACTION DROPDOWN MENUS */
+.dropdown-menu,
+.dropdown-content,
+.post-dropdown-content,
+.sidebar-dropdown-menu {
     display: none;
     position: absolute;
     right: 0;
-    top: 100%;
+    top: calc(100% + 4px);
     background-color: #ffffff;
-    min-width: 120px;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    border-radius: 8px;
-    border: 1px solid #eaeaea;
-    overflow: hidden;
+    min-width: 160px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(255, 107, 0, 0.08);
+    z-index: 100;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 107, 0, 0.15);
+    padding: 6px;
+    animation: popupBounceIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.dropdown-menu a,
+.dropdown-menu button,
+.dropdown-content a,
+.dropdown-content button,
 .post-dropdown-content a,
-.post-dropdown-content button {
-    color: #333;
-    padding: 12px 16px;
+.post-dropdown-content button,
+.sidebar-dropdown-menu a,
+.sidebar-dropdown-menu button {
+    color: #374151;
+    padding: 10px 14px;
     text-decoration: none;
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     width: 100%;
     text-align: left;
     background: none;
     border: none;
     font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.2s ease;
     font-family: inherit;
 }
 
+.dropdown-menu a:hover,
+.dropdown-menu button:hover,
+.dropdown-content a:hover,
+.dropdown-content button:hover,
 .post-dropdown-content a:hover,
-.post-dropdown-content button:hover {
-    background-color: #f4f7fe;
-    color: var(--accent-orange);
+.post-dropdown-content button:hover,
+.sidebar-dropdown-menu a:hover,
+.sidebar-dropdown-menu button:hover {
+    background-color: #ff6b00;
+    color: #ffffff !important;
+    transform: translateX(3px);
 }
 
-.post-dropdown-content.show {
+.dropdown-menu a:hover i,
+.dropdown-menu button:hover i,
+.dropdown-content a:hover i,
+.dropdown-content button:hover i,
+.post-dropdown-content a:hover i,
+.post-dropdown-content button:hover i,
+.sidebar-dropdown-menu a:hover i,
+.sidebar-dropdown-menu button:hover i {
+    color: #ffffff !important;
+}
+
+.dropdown-menu.show,
+.dropdown-content.show,
+.post-dropdown-content.show,
+.sidebar-dropdown-menu.show {
     display: block;
 }
 
@@ -379,15 +469,19 @@ body {
     border: none;
     color: var(--text-tertiary);
     cursor: pointer;
-    padding: 8px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 16px;
     border-radius: 50%;
-    transition: background-color 0.2s;
+    transition: all 0.2s ease;
 }
 
 .post-dropdown-btn:hover {
-    color: var(--text-primary);
-    background-color: #f4f7fe;
+    color: #ff6b00;
+    background-color: rgba(255, 107, 0, 0.1);
 }
 
 /* ===== MAIN CONTENT ===== */
@@ -425,101 +519,145 @@ body {
     color: var(--text-primary);
 }
 
-/* ===== TWEET / POST CARD ===== */
+/* ===== TWEET / POST CARD (Mockup Redesign) ===== */
 .tweet-card {
-    background-color: var(--card-bg);
-    border-radius: 20px;
+    background-color: #FFFFFF;
+    border-radius: 24px;
     padding: 24px;
-    margin: 8px 0 16px 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    margin: 12px 0 20px 0;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
 .click-post {
     text-decoration: none;
     color: inherit;
+    display: block;
 }
 
 .post-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
+    gap: 14px;
+    margin-bottom: 16px;
 }
 
 .avatar {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     object-fit: cover;
+    background-color: #E5E7EB;
 }
 
 .post-user-info {
     flex: 1;
+    display: flex;
+    align-items: center;
 }
 
 .post-user-info .name {
     font-weight: 700;
-    font-size: 16px;
+    font-size: 15px;
+    color: #111827;
 }
 
 .post-user-info .handle {
-    color: var(--text-tertiary);
+    display: none;
+}
+
+.follow-pill-btn {
+    background-color: #ff6b00;
+    color: #111827;
+    font-weight: 700;
     font-size: 14px;
+    padding: 7px 22px;
+    border-radius: 20px;
+    border: 1.5px solid #E5E7EB;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(255, 107, 0, 0.2);
+}
+
+.follow-pill-btn:hover {
+    background-color: #F4F4F0;
+    border-color: #E5E7EB;
+    color: #111827;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1.5px);
+}
+
+.follow-pill-btn:active {
+    background-color: #18181B;
+    border-color: #3F3F46;
+    color: #1E293B;
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.follow-pill-btn.following {
+    background-color: #18181B;
+    border: 1.5px solid #3F3F46;
+    color: #334155;
+    box-shadow: none;
+}
+
+.follow-pill-btn.following:hover {
+    background-color: #27272A;
+    border-color: #52525B;
+    color: #64748B;
+    transform: none;
 }
 
 .post-body {
-    font-size: 15px;
+    font-size: 14.5px;
     line-height: 1.6;
-    color: var(--text-secondary);
+    color: #374151;
     margin-bottom: 16px;
-}
-
-.post-body.bold {
-    font-weight: 700;
-    color: var(--text-secondary);
-    padding-top: 10px;
 }
 
 .tweet-media {
     width: 100%;
     border-radius: 16px;
     overflow: hidden;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
+    background-color: #E2E8F0;
 }
 
 .tweet-media img {
     width: 100%;
-    height: auto;
+    max-height: 450px;
+    object-fit: cover;
     display: block;
     border-radius: 16px;
 }
 
+.post-divider {
+    height: 1px;
+    background-color: #F3F4F6;
+    width: 100%;
+    margin: 16px 0 14px 0;
+}
+
 .tweet-actions {
     display: flex;
-    gap: 20px;
-    color: var(--text-tertiary);
-    justify-content: space-around;
-    font-size: 14px;
-    padding-top: 10px;
-    border-top: 1px solid #eee;
+    justify-content: space-between;
+    padding: 0 12px;
+    color: #6B7280;
+    font-size: 13.5px;
+    font-weight: 500;
 }
 
 .tweet-actions .item {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     cursor: pointer;
+    transition: color 0.2s;
 }
 
-.follow-btn {
-    background: none;
-    border: 1px solid #E0E0E0;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    color: var(--text-primary);
+.tweet-actions .item:hover {
+    color: #111827;
 }
 
 /* ===== RIGHT SIDEBAR ===== */
@@ -695,11 +833,11 @@ body {
         color: var(--text-tertiary);
     }
 
-    #menu-toggle:checked ~ .layout .sidebar-left {
+    #menu-toggle:checked~.layout .sidebar-left {
         transform: translateX(0);
     }
 
-    #menu-toggle:checked ~ #overlay {
+    #menu-toggle:checked~#overlay {
         display: block;
         background: none;
     }
@@ -747,8 +885,345 @@ body {
         gap: 20px;
     }
 
-    #menu-toggle:checked ~ #overlay {
+    #menu-toggle:checked~#overlay {
         display: block;
         background: rgba(0, 0, 0, 0.5);
     }
+}
+
+/* =============================================================
+   CHAT POPUP MODAL (Sesuai Mockup Gambar) & CLEAN SIDEBAR
+   ============================================================= */
+.chat-choice-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-choice-modal.show {
+    display: flex;
+}
+
+.chat-choice-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(6px);
+}
+
+.chat-choice-container {
+    position: relative;
+    background: #1A1D24;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 28px;
+    padding: 32px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+    z-index: 2;
+    animation: popupBounceIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@keyframes popupBounceIn {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.chat-choice-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    padding: 0 4px;
+}
+
+.chat-choice-header h3 {
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.btn-close-modal {
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    color: #9CA3AF;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 16px;
+}
+
+.btn-close-modal:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+}
+
+.chat-choice-grid {
+    display: flex;
+    gap: 20px;
+}
+
+/* 1. Keadaan Default (Kartu Putih) */
+.chat-type-card {
+    width: 135px;
+    height: 145px;
+    background: #FFFFFF;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+}
+
+.chat-type-icon-box {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #FFF0E5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    color: #FF6B00;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chat-type-label {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 2. Keadaan Saat Dihover */
+.chat-type-card:hover {
+    transform: translateY(-6px);
+    border-color: #FF6B00;
+    box-shadow: 0 14px 30px rgba(255, 107, 0, 0.2);
+}
+
+.chat-type-card:hover .chat-type-icon-box {
+    background: #FFE4D1;
+    transform: scale(1.08);
+}
+
+/* 3. Keadaan Saat Ditekan (:active) */
+.chat-type-card:active {
+    background: #FF6B00 !important;
+    border-color: #FF6B00 !important;
+    transform: translateY(0) scale(0.96);
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.3);
+}
+
+.chat-type-card:active .chat-type-icon-box {
+    background: #FFFFFF !important;
+    color: #FF6B00 !important;
+    transform: scale(1);
+}
+
+.chat-type-card:active .chat-type-label {
+    color: #111827 !important;
+}
+
+.chat-placeholder-toast {
+    margin-top: 24px;
+    padding: 10px 20px;
+    background: rgba(255, 107, 0, 0.15);
+    border: 1px solid rgba(255, 107, 0, 0.3);
+    color: #FF8A33;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.chat-placeholder-toast.show {
+    opacity: 1;
+}
+
+/* Clean sidebar utilities */
+.sidebar-post-link {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar-profile-wrapper {
+    position: relative;
+}
+
+.sidebar-dots-btn {
+    padding: 0;
+    margin-left: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-dropdown-menu {
+    bottom: 100%;
+    top: auto;
+    right: 0;
+    margin-bottom: 10px;
+    min-width: 150px;
+}
+
+.sidebar-logout-link {
+    color: #ff4757;
+}
+
+@media (max-width: 520px) {
+    .chat-choice-grid {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .chat-type-card {
+        width: 100%;
+        height: 80px;
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: 0 24px;
+    }
+}
+
+/* =============================================================
+   MASTER DESIGN SYSTEM HELPER UTILITIES
+   Gunakan class ini di seluruh halaman agar tidak ada inline CSS
+   ============================================================= */
+.clickable-card { cursor: pointer; }
+.empty-state, .loading-state { text-align: center; color: #6B7280; padding: 24px; font-size: 14.5px; }
+.error-state { text-align: center; color: #EF4444; padding: 24px; font-size: 14.5px; font-weight: 500; }
+.btn-cancel { text-decoration: none; text-align: center; display: inline-block; padding: 10px 20px; border-radius: 12px; background-color: #F3F4F6; color: #374151; font-weight: 600; border: none; cursor: pointer; transition: all 0.2s; }
+.btn-cancel:hover { background-color: #E5E7EB; color: #111827; }
+.text-link { color: #ff6b00; text-decoration: none; font-weight: 600; }
+.text-link:hover { text-decoration: underline; }
+.text-error { color: #EF4444; }
+.mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; }
+.mt-20 { margin-top: 20px; }
+.mb-16 { margin-bottom: 16px; }
+.text-center { text-align: center; }
+.d-none { display: none !important; }
+
+/* =============================================================
+   MASTER BUTTON DESIGN SYSTEM (GLOBAL UNIFORM BUTTONS)
+   Menyeragamkan gaya visual seluruh tombol (Primary, Secondary, Cancel)
+   tanpa mengubah ukuran (padding/width) masing-masing halaman.
+   ============================================================= */
+
+/* Base Button Rules */
+button,
+.btn,
+.btn-submit,
+.submit,
+.cancel,
+.btn-message,
+.post-btn {
+    font-family: inherit;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 1. Primary Orange Variant */
+.btn-submit,
+.submit,
+.post-btn,
+.btn-primary {
+    background-color: #ff6b00;
+    color: #ffffff !important;
+    border: none;
+    box-shadow: 0 4px 14px rgba(255, 107, 0, 0.28);
+}
+
+.btn-submit:hover,
+.submit:hover,
+.post-btn:hover,
+.btn-primary:hover {
+    background-color: #e66000;
+    transform: translateY(-1.5px);
+    box-shadow: 0 6px 18px rgba(255, 107, 0, 0.38);
+}
+
+/* 2. Secondary Outline Variant */
+.btn-message,
+.btn-secondary,
+.btn-google,
+.btn-apple {
+    background-color: #ffffff;
+    color: #1f2937 !important;
+    border: 1.5px solid #e5e7eb;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+}
+
+.btn-message:hover,
+.btn-secondary:hover,
+.btn-google:hover,
+.btn-apple:hover {
+    background-color: #f9fafb;
+    border-color: #d1d5db;
+    transform: translateY(-1px);
+}
+
+/* 3. Muted / Cancel Variant */
+.cancel,
+.btn-cancel {
+    background-color: #f3f4f6;
+    color: #4b5563 !important;
+    border: none;
+}
+
+.cancel:hover,
+.btn-cancel:hover {
+    background-color: #e5e7eb;
+    color: #1f2937 !important;
+}
+
+/* 4. Active Click Tactile Feedback */
+button:active,
+.btn:active,
+.btn-submit:active,
+.submit:active,
+.cancel:active {
+    transform: translateY(0) scale(0.98);
 }

@@ -1,100 +1,138 @@
 /* =============================================================
-   DETAIL.CSS — Styles khusus halaman Detail Post + Komentar
+   DETAIL.CSS — Layout baru sesuai mockup gambar
    Membutuhkan: base.css
    ============================================================= */
 
-/* Post card detail (berbeda dari .tweet-card yang ada di base) */
-.post-card {
-    background-color: var(--card-bg);
+/* Container Utama Grid */
+.detail-container {
+    padding: 32px 40px;
+    max-width: 1240px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 32px;
+    align-items: flex-start;
+}
+
+/* KARTU KIRI: POSTINGAN */
+.detail-post-card {
+    background-color: #FFFFFF;
+    border: 1px solid var(--border-color);
     border-radius: 20px;
-    padding: 24px;
-    margin: 24px 40px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    padding: 28px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
-.post-image-container {
-    width: 100%;
-    border-radius: 16px;
-    overflow: hidden;
-    margin-bottom: 20px;
-}
-
-.post-image-container img {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-.post-title {
-    font-size: 22px;
-    font-weight: 800;
-    margin-bottom: 16px;
-    line-height: 1.3;
-}
-
-.tags {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-}
-
-.tag {
-    background-color: #F5F5F5;
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-secondary);
-}
-
-.post-meta {
+.detail-post-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-top: 20px;
-    border-top: 1px solid #F0F0F0;
-    color: var(--text-tertiary);
-    font-size: 13px;
+    margin-bottom: 24px;
 }
 
-.interactions {
-    display: flex;
-    gap: 20px;
-}
-
-.interaction-item {
+.detail-author-info {
     display: flex;
     align-items: center;
-    gap: 6px;
-    cursor: pointer;
+    gap: 14px;
 }
 
-.interaction-item:hover {
+.detail-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.detail-author-name {
+    font-size: 16px;
+    font-weight: 700;
     color: var(--text-primary);
 }
 
-/* Seksi Komentar */
-.comments-section {
-    background-color: var(--card-bg);
-    border-radius: 20px;
-    padding: 24px;
-    margin: 0 40px 40px 40px;
-}
-
-.comments-section h3 {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 20px;
-}
-
-.comment {
+.btn-report-post {
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4B5563;
+    cursor: pointer;
     display: flex;
-    gap: 12px;
-    margin-bottom: 20px;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
 }
 
-.comment-avatar {
+.btn-report-post:hover {
+    background: #F9FAFB;
+    border-color: #D1D5DB;
+    color: #111827;
+}
+
+.detail-img-wrapper {
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 24px;
+    background-color: #F3F4F6;
+}
+
+.detail-post-img {
+    width: 100%;
+    max-height: 560px;
+    object-fit: cover;
+    display: block;
+}
+
+.detail-post-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 14px;
+    line-height: 1.35;
+}
+
+.detail-post-body {
+    font-size: 15px;
+    color: #4B5563;
+    line-height: 1.75;
+    white-space: pre-line;
+}
+
+/* KARTU KANAN: KOMENTAR & INTERAKSI */
+.detail-interaction-card {
+    background-color: #FFFFFF;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 64px);
+    position: sticky;
+    top: 32px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.detail-comments-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.detail-comment-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.detail-comment-avatar {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -102,88 +140,143 @@
     flex-shrink: 0;
 }
 
-.comment-content {
+.detail-comment-content {
     flex: 1;
 }
 
-.comment-header {
+.detail-comment-author {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+}
+
+.detail-comment-text {
+    font-size: 14px;
+    color: #4B5563;
+    line-height: 1.6;
+}
+
+.detail-comment-delete {
+    background: none;
+    border: none;
+    color: #EF4444;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 8px;
+    font-weight: 600;
+}
+
+/* FOOTER KARTU KANAN (DOCKED DI BAWAH) */
+.detail-card-footer {
+    padding: 18px 24px;
+    border-top: 1px solid var(--border-color);
+    background-color: #FFFFFF;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.detail-stats-row {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-bottom: 18px;
+    color: #6B7280;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.detail-stat-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 4px;
-    font-size: 14px;
-    flex-wrap: wrap;
-}
-
-.comment-name {
-    font-weight: 700;
-}
-
-.comment-handle {
-    color: var(--text-tertiary);
-}
-
-.comment-time {
-    color: var(--text-tertiary);
-    font-size: 12px;
-}
-
-.comment-text {
-    font-size: 14px;
-    color: var(--text-secondary);
-    line-height: 1.5;
-}
-
-/* Form tambah komentar */
-.add-comment-form {
-    display: flex;
-    gap: 12px;
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid #F0F0F0;
-    align-items: flex-start;
-}
-
-.add-comment-form textarea {
-    flex: 1;
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 10px 14px;
-    font-size: 14px;
+    color: inherit;
+    font-size: inherit;
     font-family: inherit;
-    resize: none;
-    outline: none;
-    background-color: #F8F9FA;
+    font-weight: inherit;
 }
 
-.add-comment-form textarea:focus {
-    border-color: var(--accent-orange);
-    background-color: #FFFFFF;
+.detail-stat-btn:hover {
+    color: var(--text-primary);
 }
 
-.add-comment-form button[type="submit"] {
-    background-color: var(--accent-orange);
-    color: #FFFFFF;
+.detail-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detail-input-box {
+    display: flex;
+    align-items: center;
+    background-color: #F3F4F6;
+    border-radius: 28px;
+    padding: 8px 16px;
+    gap: 12px;
+}
+
+.btn-input-emoji {
+    background: none;
     border: none;
-    border-radius: 20px;
-    padding: 10px 20px;
-    font-weight: 700;
-    font-size: 14px;
+    color: #6B7280;
+    font-size: 18px;
     cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
 }
 
-/* Responsive */
-@media (max-width: 1100px) {
-    .post-card,
-    .comments-section {
-        margin: 24px;
+.detail-comment-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    flex: 1;
+    font-size: 14px;
+    color: var(--text-primary);
+    font-family: inherit;
+}
+
+.detail-comment-input::placeholder {
+    color: #9CA3AF;
+}
+
+.btn-send-comment {
+    background: none;
+    border: none;
+    color: #FF6B00;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+.btn-send-comment:hover {
+    transform: scale(1.1);
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+    .detail-interaction-card {
+        height: 600px;
+        position: static;
     }
 }
 
-@media (max-width: 768px) {
-    .post-card,
-    .comments-section {
-        margin: 16px;
+@media (max-width: 640px) {
+    .detail-container {
         padding: 16px;
+    }
+    .detail-post-card {
+        padding: 18px;
     }
 }

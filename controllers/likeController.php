@@ -27,8 +27,16 @@ if ($method == "GET") {
     echo json_encode($data);
 } 
 else if ($method == "POST") {
-    $stmt = $pdo->prepare("INSERT INTO likes (user_id, post_id) VALUES (?, ?)");
+    $stmt = $pdo->prepare("INSERT IGNORE INTO likes (user_id, post_id) VALUES (?, ?)");
     $stmt->execute([$user['id'], $post_id]);
+
+    $postStmt = $pdo->prepare("SELECT user_id FROM posts WHERE id = ?");
+    $postStmt->execute([$post_id]);
+    $postOwner = $postStmt->fetchColumn();
+    if ($postOwner && $postOwner != $user['id']) {
+        $notifStmt = $pdo->prepare("INSERT INTO notifications (user_id, actor_id, type, reference_id) VALUES (?, ?, 'like', ?)");
+        $notifStmt->execute([$postOwner, $user['id'], $post_id]);
+    }
 
     $count_stmt = $pdo->prepare("SELECT COUNT(*) as count FROM likes WHERE post_id = ?");
     $count_stmt->execute([$post_id]);

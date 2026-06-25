@@ -1,6 +1,5 @@
 <?php
 session_start();
-require_once 'config.php';
 if (!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
@@ -23,37 +22,25 @@ if (!$type) {
 $is_edit = ($type === 'edit');
 $is_comment = ($type === 'comment');
 $is_new = ($type === 'new');
-$post = null;
 
-if ($is_edit) {
-    if ($post_id) {
-        $stmt = $pdo->prepare("SELECT * FROM posts WHERE id = ? AND user_id = ?");
-        $stmt->execute([$post_id, $_SESSION['user_id']]);
-        $post = $stmt->fetch();
-    }
-} elseif ($is_comment) {
-    if (!$comment_post_id) {
-        header('Location: home.php');
-        exit();
-    }
+if ($is_comment && !$comment_post_id) {
+    header('Location: home.php');
+    exit();
 }
 
 $formTitle = $is_comment ? 'Comment' : ($is_edit ? 'Edit Post' : 'Create Post');
 $buttonLabel = $is_comment ? 'Post Comment' : ($is_edit ? 'Update Post' : 'Post');
 $textareaPlaceholder = $is_comment ? 'Write your comment...' : "What's on your mind?";
-$textareaValue = $post ? htmlspecialchars($post['content']) : '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Glow-in | <?php echo $is_edit ? 'Edit Post' : 'Create Post'; ?></title>
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="assets/CSS/base.css?v=6" />
-  <link rel="stylesheet" href="assets/CSS/home.css" />
-  <link rel="stylesheet" href="assets/CSS/post.css" />
+  <title>Glow-in | <?= htmlspecialchars($formTitle) ?></title>
+  <link rel="stylesheet" href="../assets/CSS/base.css?v=8" />
+  <link rel="stylesheet" href="../assets/CSS/home.css" />
+  <link rel="stylesheet" href="../assets/CSS/post.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 </head>
 
@@ -61,35 +48,35 @@ $textareaValue = $post ? htmlspecialchars($post['content']) : '';
 <input type="checkbox" id="menu-toggle" class="hidden-checkbox">
 
 <div class="layout">
+<?php require_once '../includes/sidebar.php'; ?>
 
-  <!-- LEFTBAR -->
-<?php require_once 'includes/sidebar.php'; ?>
-
-  <!-- MAIN -->
   <main class="main-content">
     <header class="top-header">
       <label for="menu-toggle" class="menu-toggle-btn">
         <i class="fa-solid fa-bars"></i>
       </label>
-      <h1><?php echo $is_edit ? 'Edit Post' : 'Create Post'; ?></h1>
+      <h1><?= htmlspecialchars($formTitle) ?></h1>
     </header>
 
     <div class="container">
-
-      <?php if ($is_edit && $post_id && !$post): ?>
-          <p>Post not found or unauthorized.</p>
-      <?php else: ?>
-
       <form id="post-form" class="post-card">
-        <div class="post-header">
-          <img src="<?= htmlspecialchars($_SESSION['profile_pic'] ?? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80') ?>" class="avatar">
+        <div class="post-header post-header-flex">
+          <img src="<?= htmlspecialchars($_SESSION['profile_pic'] ?? 'https://ui-avatars.com/api/?name=User&background=ff6b00&color=ffffff') ?>" class="avatar">
           <div>
-            <div class="name"><?php echo htmlspecialchars($_SESSION['name'] ?? $_SESSION['username'] ?? 'User'); ?></div>
-            <div class="handle">@<?php echo htmlspecialchars($_SESSION['username'] ?? 'user'); ?></div>
+            <div class="post-user-row">
+              <span class="name"><?= htmlspecialchars($_SESSION['name'] ?? $_SESSION['username'] ?? 'User') ?></span>
+              <?php if (!$is_comment): ?>
+              <select id="post-visibility" class="post-visibility-select">
+                <option value="0">🌐 Public</option>
+                <option value="1">🕵️ Anonim</option>
+              </select>
+              <?php endif; ?>
+            </div>
+            <div class="handle">@<?= htmlspecialchars($_SESSION['username'] ?? 'user') ?></div>
           </div>
         </div>
 
-        <textarea id="post-content" name="content" class="post-textarea" placeholder="<?= htmlspecialchars($textareaPlaceholder) ?>" required><?= $textareaValue ?></textarea>
+        <textarea id="post-content" name="content" class="post-textarea" placeholder="<?= htmlspecialchars($textareaPlaceholder) ?>" required></textarea>
 
         <?php if (!$is_comment): ?>
         <div class="upload-box">
@@ -103,14 +90,12 @@ $textareaValue = $post ? htmlspecialchars($post['content']) : '';
           <button type="submit" class="btn submit"><?= htmlspecialchars($buttonLabel) ?></button>
         </div>
       </form>
-      <?php endif; ?>
-
     </div>
   </main>
 
-  <!-- RIGHTBAR -->
-<?php require_once 'includes/rightbar.php'; ?>
-<?php require_once 'includes/footer.php'; ?>
+<?php require_once '../includes/rightbar.php'; ?>
+<?php require_once '../includes/footer.php'; ?>
+</div>
 
 <script>
 const apiKey = "<?= $_SESSION['api_key'] ?? '' ?>";
@@ -119,13 +104,32 @@ const postId = "<?= $post_id ?>";
 const commentPostId = "<?= $comment_post_id ?>";
 const isEdit = <?= $is_edit ? 'true' : 'false' ?>;
 const isComment = <?= $is_comment ? 'true' : 'false' ?>;
-const isNew = <?= $is_new ? 'true' : 'false' ?>;
+
+if(isEdit && postId) {
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('../controllers/postController.php?id=' + postId, {
+            headers: { 'Authorization': 'Bearer ' + apiKey }
+        })
+        .then(res => res.json())
+        .then(post => {
+            if(post && !post.error) {
+                document.getElementById('post-content').value = post.content || '';
+                const vis = document.getElementById('post-visibility');
+                if(vis && post.is_anonymous !== undefined) {
+                    vis.value = post.is_anonymous == 1 ? "1" : "0";
+                }
+            }
+        });
+    });
+}
 
 const form = document.getElementById('post-form');
 form.addEventListener('submit', function(e) {
     e.preventDefault();
 
     const content = document.getElementById('post-content').value.trim();
+    const visibilityEl = document.getElementById('post-visibility');
+    const isAnonymous = visibilityEl ? parseInt(visibilityEl.value) : 0;
 
     if (!content) {
         alert('Please enter some content!');
@@ -133,7 +137,7 @@ form.addEventListener('submit', function(e) {
     }
 
     if (isComment) {
-        fetch('api/comments.php', {
+        fetch('../controllers/commentController.php', {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + apiKey,
@@ -161,15 +165,15 @@ form.addEventListener('submit', function(e) {
     }
 
     if (isEdit) {
-
-        fetch('api/posts.php?id=' + postId, {
+        fetch('../controllers/postController.php?id=' + postId, {
             method: 'PUT',
             headers: {
                 'Authorization': 'Bearer ' + apiKey,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                content: content
+                content: content,
+                is_anonymous: isAnonymous
             })
         })
         .then(response => response.json())
@@ -187,7 +191,7 @@ form.addEventListener('submit', function(e) {
         return;
     }
 
-    fetch('api/posts.php', {
+    fetch('../controllers/postController.php', {
         method: 'POST',
         headers: {
             'Authorization': 'Bearer ' + apiKey,
@@ -195,7 +199,8 @@ form.addEventListener('submit', function(e) {
         },
         body: JSON.stringify({
             user_id: userId,
-            content: content
+            content: content,
+            is_anonymous: isAnonymous
         })
     })
     .then(response => response.json())

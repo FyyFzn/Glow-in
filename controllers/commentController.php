@@ -39,6 +39,14 @@ else if ($method == "POST") {
     $stmt = $pdo->prepare($query);
     $stmt->execute([$user_id, $post_id, $comment_text]);
 
+    $postStmt = $pdo->prepare("SELECT user_id FROM posts WHERE id = ?");
+    $postStmt->execute([$post_id]);
+    $postOwner = $postStmt->fetchColumn();
+    if ($postOwner && $postOwner != $user_id) {
+        $notifStmt = $pdo->prepare("INSERT INTO notifications (user_id, actor_id, type, reference_id) VALUES (?, ?, 'comment', ?)");
+        $notifStmt->execute([$postOwner, $user_id, $post_id]);
+    }
+
     echo json_encode(["success" => true, "message" => "Komentar berhasil ditambahkan"]);
 } 
 else if ($method == "PUT") {
